@@ -1,0 +1,97 @@
+:root {
+  --bg-primary: #f4f4f5;
+  --bg-secondary: #ffffff;
+  --text-main: #18181b;
+  --text-muted: #52525b;
+  --accent: #0ea5e9;
+  --border-color: #e4e4e7;
+}
+
+body.dark {
+  --bg-primary: #09090b;
+  --bg-secondary: #18181b;
+  --text-main: #f4f4f5;
+  --text-muted: #a1a1aa;
+  --accent: #38bdf8;
+  --border-color: #27272a;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: 'Consolas', 'Courier New', monospace;
+  margin: 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+nav { display: flex; gap: 1.5rem; align-items: center; }
+nav a { color: var(--text-main); text-decoration: none; font-weight: bold; }
+nav a:hover { color: var(--accent); }
+
+button {
+  background-color: var(--accent);
+  color: #09090b;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+}
+
+section { max-width: 900px; margin: 4rem auto; padding: 0 2rem; }
+
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+}
+.card:hover { transform: translateY(-5px); border-color: var(--accent); }
+
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+/* Hiệu ứng con trỏ Terminal nhấp nháy */
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.1em;
+  background-color: var(--accent); /* Dùng màu xanh sáng cho ngầu */
+  vertical-align: bottom;
+  margin-left: 5px;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
