@@ -1,6 +1,7 @@
 # Báo cáo Ứng dụng AI (AI Prompt Engineering Log)
 
 **Dự án:** Portfolio Cá nhân (ReactJS)
+
 **Mục đích:** Ghi nhận quá trình sử dụng Trợ lý AI (LLM) để khởi tạo dự án, tối ưu hóa giao diện (UI/UX), tinh chỉnh mã nguồn theo phong cách của bản thân và debug.
 
 ---
@@ -35,4 +36,3 @@
 
 **Kết quả nhận được:** AI thiết kế một Form liên hệ mô phỏng lại các dòng lệnh Terminal (như `$ whoami`, `$ mail`), xử lý `useState` trơn tru và hiển thị trạng thái log trực quan thay vì dùng alert mặc định.
 
---
