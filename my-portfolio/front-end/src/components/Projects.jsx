@@ -1,23 +1,24 @@
-import { useState } from 'react';
-
-// Bổ sung thêm link Github
-const projectDB = [
-  { 
-    id: 1, 
-    title: 'Pwn & Reverse Engineering CTF', 
-    tech: 'C, Assembly', 
-    desc: 'Luyện tập kỹ năng khai thác lỗ hổng nhị phân, kỹ năng dịch ngược, kiến thức về kiến trúc bộ nhớ và hợp ngữ qua các CTFs challenge thực tế.',
-    githubLink: 'https://github.com/luanhocuit/CTFs'
-  }
-];
+import { useState, useEffect } from 'react';
 
 const Projects = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [projects, setProjects] = useState([]); // Dữ liệu sẽ đổ từ Backend vào đây
 
-  const filteredProjects = projectDB.filter(proj => 
-    proj.tech.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    proj.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Định nghĩa URL của Backend đã deploy
+  const API_URL = 'https://web-development-ato3.onrender.com';
+
+  // Dùng useEffect để lấy dữ liệu từ server
+  useEffect(() => {
+    // Nếu có searchTerm thì gọi API tìm kiếm, nếu không thì lấy toàn bộ
+    const url = searchTerm 
+      ? `${API_URL}/api/projects?search=${searchTerm}` 
+      : `${API_URL}/api/projects`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => setProjects(data))
+      .catch(err => console.error("Lỗi khi kết nối Backend:", err));
+  }, [searchTerm]); // Mỗi khi searchTerm đổi, nó tự gọi lại API
 
   return (
     <section id="projects">
@@ -31,7 +32,7 @@ const Projects = () => {
       />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {filteredProjects.map(proj => (
+        {projects.map(proj => (
           <div key={proj.id} style={{ border: '1px solid var(--border-color)', padding: '1.5rem', borderRadius: '4px' }}>
             
             <h3 style={{ margin: '0 0 10px 0', color: 'var(--text-main)' }}>{proj.title}</h3>
@@ -41,7 +42,6 @@ const Projects = () => {
               {proj.desc}
             </p>
             
-            {/* Link truy cập Source Code */}
             <a 
               href={proj.githubLink} 
               target="_blank" 
@@ -58,7 +58,6 @@ const Projects = () => {
             >
               [+] Ấn vào đây để truy cập link Github
             </a>
-
           </div>
         ))}
       </div>
