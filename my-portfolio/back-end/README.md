@@ -6,8 +6,9 @@
 
 * **Runtime:** Node.js (Môi trường thực thi JavaScript phía server)
 * **Framework:** Express.js (Xây dựng RESTful API tinh gọn, hiệu năng cao)
-* **Middleware:** * **CORS:** Cấu hình cho phép kết nối an toàn giữa Frontend (Vercel) và Backend (Render).
-    * **Express JSON:** Xử lý và phân tích dữ liệu JSON từ Client.
+* **Middleware:** 
+  * **CORS:** Cấu hình cho phép kết nối an toàn giữa Frontend (Vercel) và Backend (Render).
+  * **Express JSON:** Xử lý và phân tích dữ liệu JSON từ Client.
 * **Data Storage:** `projects.json` (File-based database, tối ưu cho dữ liệu dự án).
 
 ## 🔗 Hỗ Trợ Chuẩn RESTful API
@@ -32,7 +33,6 @@ npm install express cors
 ```bash
 node index.js
 ```
-
 ## 📂 Cấu Trúc Thư Mục (Project Structure)
 ```text
 back-end/
