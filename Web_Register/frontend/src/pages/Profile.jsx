@@ -23,6 +23,9 @@ function Profile() {
         birthday: ""
     });
 
+    // Khai báo backendURL dùng chung cho cả file
+    const backendURL = import.meta.env.VITE_API_URL || "https://web-register-new.onrender.com";
+
     useEffect(() => {
         const fetchUserData = async () => {
             const storedUser = localStorage.getItem("user");
@@ -31,7 +34,6 @@ function Profile() {
                     const parsedUser = JSON.parse(storedUser);
                     const currentUid = parsedUser.uid || parsedUser.id || "";
 
-                    // Cập nhật tạm thông tin từ localStorage trước
                     setUser({
                         uid: currentUid,
                         name: parsedUser.fullName || parsedUser.name || "",
@@ -41,10 +43,10 @@ function Profile() {
                         birthday: parsedUser.dateOfBirth || parsedUser.birthday || ""
                     });
 
-                    // Gọi thẳng API lấy thông tin mới nhất từ Firebase để đảm bảo chuẩn 100% email và dữ liệu
                     if (currentUid) {
                         const token = localStorage.getItem("token");
-                        const res = await fetch(`http://localhost:5000/api/users/${currentUid}`, {
+                        // SỬA LỖI 1: Thay localhost bằng backendURL
+                        const res = await fetch(`${backendURL}/api/users/${currentUid}`, {
                             headers: {
                                 "Authorization": `Bearer ${token}`
                             }
@@ -68,7 +70,7 @@ function Profile() {
         };
 
         fetchUserData();
-    }, []);
+    }, [backendURL]); // Thêm backendURL vào dependency
 
     const handleChange = (e) => {
         setUser({
@@ -86,7 +88,8 @@ function Profile() {
         try {
             const token = localStorage.getItem("token");
             
-            const response = await fetch(`http://localhost:5000/api/users/${user.uid}`, {
+            // SỬA LỖI 1: Thay localhost bằng backendURL
+            const response = await fetch(`${backendURL}/api/users/${user.uid}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -125,7 +128,8 @@ function Profile() {
 
     return (
         <div className="profile-page">
-            <Sidebar />
+            {/* SỬA LỖI 2: Đổi <Sidebar /> thành <SideBar /> cho đúng tên file import */}
+            <SideBar />
             <div className="profile-content">
                 <div className="dashboard">
                     <StatsCard

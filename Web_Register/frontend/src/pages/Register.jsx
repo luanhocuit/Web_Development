@@ -48,8 +48,11 @@ function Register() {
         }
 
         try {
+            // Lấy URL từ biến môi trường của Vite, fallback về link Render
+            const backendURL = import.meta.env.VITE_API_URL || "https://web-register-new.onrender.com";
+
             // 2. Send Data to Node.js Backend
-            const response = await fetch("http://localhost:5000/api/auth/register", {
+            const response = await fetch(`${backendURL}/api/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

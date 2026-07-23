@@ -18,9 +18,11 @@ function Login() {
         e.preventDefault();
         setError(""); // Xóa lỗi cũ khi bấm login lại
 
-        try {
+       try {
+            const backendURL = import.meta.env.VITE_API_URL || "https://web-register-new.onrender.com";
+            
             // Gọi API kiểm tra tài khoản từ Backend
-            const response = await fetch("http://localhost:5000/api/auth/login", {
+            const response = await fetch(`${backendURL}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
