@@ -58,3 +58,8 @@ backend/
 │   ├── auth.js              # Định tuyến API xác thực (/api/auth)
 │   └── user.js              # Định tuyến API quản lý người dùng (/api/users)
 └── server.js                # File khởi chạy ứng dụng Express server
+```
+## Website : 
+[Web-Register](https://web-register-ashen.vercel.app)
+
+=> Nếu mà login/register đợi lâu là do backend/database đang load lại (do mình dùng free:3 hihi)
