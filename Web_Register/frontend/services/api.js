@@ -1,12 +1,12 @@
 // frontend/src/services/api.js
 
-const API_URL = 'https://web-register-new.onrender.com/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://web-register-new.onrender.com';
 
 // ==================== AUTH ENDPOINTS ====================
 
 export const registerUser = async (email, password, confirmPassword, fullName) => {
   try {
-    const response = await fetch(`${API_URL}/auth/register`, {
+    const response = await fetch(`${API_URL}/api/auth/register`, { // Thêm /api ở đây
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export const registerUser = async (email, password, confirmPassword, fullName) =
 
 export const loginUser = async (email, password) => {
   try {
-    const response = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/api/auth/login`, { // Thêm /api ở đây
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export const loginUser = async (email, password) => {
 
 export const getUserProfile = async (uid) => {
   try {
-    const response = await fetch(`${API_URL}/users/${uid}`, {
+    const response = await fetch(`${API_URL}/api/users/${uid}`, { // Thêm /api ở đây
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export const getUserProfile = async (uid) => {
 
 export const updateUserProfile = async (uid, profileData) => {
   try {
-    const response = await fetch(`${API_URL}/users/${uid}`, {
+    const response = await fetch(`${API_URL}/api/users/${uid}`, { // Thêm /api ở đây
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export const updateUserProfile = async (uid, profileData) => {
 
 export const deleteUserAccount = async (uid) => {
   try {
-    const response = await fetch(`${API_URL}/users/${uid}`, {
+    const response = await fetch(`${API_URL}/api/users/${uid}`, { // Thêm /api ở đây
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export const deleteUserAccount = async (uid) => {
 
 export const healthCheck = async () => {
   try {
-    const response = await fetch(`${API_URL}/health`, {
+    const response = await fetch(`${API_URL}/api/health`, { // Đã có /api sẵn ở đây
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
