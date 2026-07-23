@@ -1,0 +1,205 @@
+/* ======================================================
+                    SIDEBAR
+====================================================== */
+
+.sidebar{
+
+    width:260px;
+
+    min-height:100vh;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(20px);
+
+    border-right:1px solid rgba(255,255,255,.12);
+
+    display:flex;
+
+    flex-direction:column;
+
+    padding:35px 25px;
+
+}
+
+.sidebar-logo{
+
+    text-align:center;
+
+    margin-bottom:45px;
+
+}
+
+.sidebar-icon{
+
+    width:80px;
+
+    height:80px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:34px;
+
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        #3b82f6,
+        #8b5cf6
+    );
+
+    box-shadow:0 15px 30px rgba(0,0,0,.25);
+
+    margin-bottom:18px;
+
+}
+
+.sidebar-logo h2{
+
+    color:white;
+
+    margin-bottom:5px;
+
+}
+
+.sidebar-logo p{
+
+    color:#cbd5e1;
+
+    font-size:14px;
+
+}
+
+.sidebar ul{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.sidebar li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:15px;
+
+    border-radius:15px;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    font-size:16px;
+
+}
+
+.sidebar li:hover{
+
+    background:rgba(255,255,255,.12);
+
+    transform:translateX(8px);
+
+}
+
+.sidebar li.active{
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+
+}
+
+.logout-btn{
+
+    margin-top:auto;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    border:none;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-size:16px;
+
+    background:#ef4444;
+
+    transition:.3s;
+
+}
+
+.logout-btn:hover{
+
+    background:#dc2626;
+
+    transform:translateY(-3px);
+
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+
+        width:90px;
+
+        padding:20px 10px;
+
+    }
+
+    .sidebar-logo h2,
+    .sidebar-logo p,
+    .sidebar li span{
+
+        display:none;
+
+    }
+
+    .sidebar li{
+
+        justify-content:center;
+
+    }
+
+    .logout-btn{
+
+        font-size:0;
+
+    }
+
+    .logout-btn svg{
+
+        font-size:18px;
+
+    }
+
+}

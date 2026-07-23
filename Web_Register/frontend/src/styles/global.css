@@ -1,0 +1,479 @@
+/* ======================================================
+                    GLOBAL CSS
+====================================================== */
+
+:root{
+
+    --primary:#3b82f6;
+    --secondary:#8b5cf6;
+    --success:#22c55e;
+    --danger:#ef4444;
+    --warning:#f59e0b;
+
+    --white:#ffffff;
+    --light:#e5e7eb;
+    --gray:#94a3b8;
+    --dark:#0f172a;
+
+    --glass:rgba(255,255,255,.12);
+
+}
+
+/* ======================================================
+                BACKGROUND
+====================================================== */
+
+.page{
+
+    width:100%;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed,
+        #0f172a
+    );
+
+}
+
+/* ======================================================
+                BACKGROUND EFFECT
+====================================================== */
+
+.background-circle{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(45px);
+
+    opacity:.35;
+
+}
+
+.circle1{
+
+    width:320px;
+    height:320px;
+
+    top:-100px;
+    left:-100px;
+
+    background:#60a5fa;
+
+}
+
+.circle2{
+
+    width:300px;
+    height:300px;
+
+    bottom:-100px;
+    right:-100px;
+
+    background:#c084fc;
+
+}
+
+/* ======================================================
+                GLASS CARD
+====================================================== */
+
+.glass-card{
+
+    width:430px;
+
+    padding:40px;
+
+    border-radius:25px;
+
+    background:rgba(255,255,255,.12);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.2);
+
+    box-shadow:0 25px 50px rgba(0,0,0,.35);
+
+    animation:fadeUp .8s ease;
+
+}
+
+/* ======================================================
+                LOGO
+====================================================== */
+
+.logo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.logo-icon{
+
+    width:80px;
+    height:80px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:50%;
+
+    color:white;
+
+    font-size:34px;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    margin-bottom:15px;
+
+    box-shadow:0 12px 25px rgba(0,0,0,.3);
+
+}
+
+.logo h1{
+
+    color:white;
+
+    font-size:38px;
+
+}
+
+.logo p{
+
+    color:#d1d5db;
+
+    margin-top:8px;
+
+}
+
+/* ======================================================
+                INPUT
+====================================================== */
+
+.input-box{
+
+    display:flex;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+    padding:0 15px;
+
+    border-radius:15px;
+
+    background:rgba(255,255,255,.12);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    transition:.3s;
+
+}
+
+.input-box:hover{
+
+    border-color:white;
+
+}
+
+.input-box:focus-within{
+
+    border-color:#60a5fa;
+
+    box-shadow:0 0 15px rgba(96,165,250,.4);
+
+}
+
+.icon{
+
+    color:white;
+
+    font-size:18px;
+
+}
+
+.input-box input{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    background:none;
+
+    color:white;
+
+    padding:16px;
+
+    font-size:15px;
+
+}
+
+.input-box input::placeholder{
+
+    color:#d1d5db;
+
+}
+
+.eye{
+
+    cursor:pointer;
+
+    color:white;
+
+    transition:.3s;
+
+}
+
+.eye:hover{
+
+    transform:scale(1.15);
+
+}
+
+/* ======================================================
+                BUTTON
+====================================================== */
+
+.main-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    margin-top:10px;
+
+    border:none;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    transition:.35s;
+
+}
+
+.main-btn{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:10px;
+
+    width:100%;
+
+    padding:15px;
+
+    margin-top:10px;
+
+    border:none;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
+
+    transition:.35s;
+
+}
+
+.main-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 25px rgba(59,130,246,.4);
+
+}
+
+.main-btn:active{
+
+    transform:scale(.98);
+
+}
+
+.main-btn:disabled{
+
+    cursor:not-allowed;
+
+    opacity:.6;
+
+}
+
+.btn-icon{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:18px;
+
+}
+
+.main-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 25px rgba(59,130,246,.4);
+
+}
+
+.main-btn:active{
+
+    transform:scale(.98);
+
+}
+
+/* ======================================================
+                TEXT
+====================================================== */
+
+.title{
+
+    color:white;
+
+    text-align:center;
+
+    font-size:32px;
+
+    margin-bottom:10px;
+
+}
+
+.subtitle{
+
+    color:#d1d5db;
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+.bottom-text{
+
+    margin-top:25px;
+
+    text-align:center;
+
+    color:white;
+
+}
+
+.bottom-text a{
+
+    color:#93c5fd;
+
+    font-weight:bold;
+
+}
+
+.bottom-text a:hover{
+
+    color:white;
+
+}
+
+/* ======================================================
+                ANIMATION
+====================================================== */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(40px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ======================================================
+                RESPONSIVE
+====================================================== */
+
+@media(max-width:768px){
+
+    .glass-card{
+
+        width:92%;
+
+        padding:30px;
+
+    }
+
+    .logo h1{
+
+        font-size:30px;
+
+    }
+
+    .title{
+
+        font-size:28px;
+
+    }
+
+}
