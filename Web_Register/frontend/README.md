@@ -1,16 +1,40 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+# Front-end của Web-Register (React + Vite)
 
-Currently, two official plugins are available:
+Phần giao diện người dùng (Front-end) được xây dựng bằng ReactJS thông qua công cụ build siêu tốc Vite, sử dụng react-router-dom để quản lý định tuyến trang và giao tiếp trực tiếp với Back-end.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Cây cấu trúc thư mục Front-end
 
-## React Compiler
+Dưới đây là sơ đồ cấu trúc thư mục của phần Front-end (`frontend/`):
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```text
+frontend/
+├── config/
+│   └── firebase.js          # Cấu hình Firebase Client SDK
+├── public/                  # Tài nguyên tĩnh công khai (favicon, icons SVG)
+├── services/
+│   └── api.js               # Quản lý các phương thức giao tiếp API với Back-end
+└── src/
+    ├── assets/              # Tài nguyên đồ họa (hình ảnh, biểu tượng)
+    ├── components/          # Các thành phần giao diện tái sử dụng
+    │   ├── Button.jsx       # Nút bấm tùy chỉnh chung
+    │   ├── InputField.jsx   # Ô nhập liệu tích hợp icon và trạng thái disable
+    │   ├── Logo.jsx         # Logo thương hiệu và tiêu đề hệ thống
+    │   ├── ProfileCard.jsx  # Thẻ chứa thông tin và form chỉnh sửa profile
+    │   ├── SideBar.jsx      # Thanh điều hướng trái và xử lý đăng xuất (Logout)
+    │   └── StatsCard.jsx    # Thẻ hiển thị các chỉ số thống kê (Login, Projects,...)
+    ├── pages/               # Các trang giao diện chính
+    │   ├── Login.jsx        # Giao diện đăng nhập hệ thống
+    │   ├── Profile.jsx      # Giao diện trang chủ / quản lý profile cá nhân
+    │   └── Register.jsx     # Giao diện đăng ký tài khoản mới
+    ├── styles/              # Các file định dạng giao diện CSS
+    │   ├── global.css       # Các biến và style chung toàn cục
+    │   ├── login.css        # Style riêng cho trang Login
+    │   ├── profile.css      # Style riêng cho trang Profile & Dashboard
+    │   ├── register.css     # Style riêng cho trang Register
+    │   └── sidebar.css      # Style riêng cho thanh Sidebar
+    ├── App.jsx              # Cấu hình các luồng định tuyến (Routes) chính
+    ├── App.css              # Style gốc của App
+    ├── index.css            # Style reset CSS
+    └── main.jsx             # Điểm khởi chạy (Entry point) của ứng dụng React
+```
