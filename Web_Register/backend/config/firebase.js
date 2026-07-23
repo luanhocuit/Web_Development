@@ -1,14 +1,29 @@
 import admin from 'firebase-admin';
-import { createRequire } from 'module';
+import dotenv from 'dotenv';
 
-// Thiết lập require để đọc file JSON trong môi trường ES Modules
-const require = createRequire(import.meta.url);
+dotenv.config();
 
-// Đọc file khóa bí mật (Thấy trong hình bạn để file .json ở thư mục gốc backend)
-const serviceAccount = require('../web-register-55260-firebase-adminsdk-fbsvc-448441837d.json');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+
+if (!admin.apps.length) {
+
+    admin.initializeApp({
+
+        credential: admin.credential.cert({
+
+            projectId: process.env.FIREBASE_PROJECT_ID,
+
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+
+            privateKey: process.env.FIREBASE_PRIVATE_KEY
+                .replace(/\\n/g, '\n')
+
+        })
+
+    });
+
+}
+
 
 export const auth = admin.auth();
+
 export const db = admin.firestore();
