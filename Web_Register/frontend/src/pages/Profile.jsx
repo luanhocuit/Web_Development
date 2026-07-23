@@ -6,7 +6,7 @@ import {
     FaFire
 } from "react-icons/fa";
 
-import Sidebar from "../components/Sidebar";
+import SideBar from "../components/SideBar";
 import StatsCard from "../components/StatsCard";
 import ProfileCard from "../components/ProfileCard";
 
