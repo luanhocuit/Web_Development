@@ -1,6 +1,6 @@
 // frontend/src/services/api.js
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://web-register-new.onrender.com/api';
 
 // ==================== AUTH ENDPOINTS ====================
 
