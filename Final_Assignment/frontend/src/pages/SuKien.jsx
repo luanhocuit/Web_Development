@@ -21,7 +21,7 @@ function SuKien() {
             const token = localStorage.getItem("token");
             
             // Thay đổi URL này nếu Backend của bạn chạy ở port khác
-            const response = await fetch("http://localhost:5000/api/events", {
+            const response = await fetch("https://final-assignment-x6nf.onrender.com/api/events", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

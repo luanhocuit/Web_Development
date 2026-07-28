@@ -11,7 +11,7 @@ function HoSo() {
             try {
                 const token = localStorage.getItem("token");
                 // Gọi API lấy thông tin của chính User đang login
-                const response = await fetch("http://localhost:5000/api/users/profile", {
+                const response = await fetch("https://final-assignment-x6nf.onrender.com/api/users/profile", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",

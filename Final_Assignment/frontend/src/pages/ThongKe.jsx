@@ -55,7 +55,7 @@ function ThongKe() {
             try {
                 const token = localStorage.getItem("token");
                 // Gọi API lấy thống kê từ Backend của bạn
-                const res = await fetch("http://localhost:5000/api/stats", {
+                const res = await fetch(" https://final-assignment-x6nf.onrender.com/api/stats", {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }

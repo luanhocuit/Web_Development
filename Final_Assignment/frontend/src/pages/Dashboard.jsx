@@ -20,8 +20,8 @@ function Dashboard() {
 
                 // Thay bằng API route thực tế của bạn
                 const [statsRes, eventsRes] = await Promise.all([
-                    fetch("http://localhost:5000/api/stats/dashboard", { headers }),
-                    fetch("http://localhost:5000/api/events/today", { headers })
+                    fetch("https://final-assignment-x6nf.onrender.com/api/stats/dashboard", { headers }),
+                    fetch("https://final-assignment-x6nf.onrender.com/api/events/today", { headers })
                 ]);
 
                 if (statsRes.ok && eventsRes.ok) {

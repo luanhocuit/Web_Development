@@ -50,8 +50,8 @@ function Modal({
             
             // Tự động nhận diện: Nếu có truyền event vào thì là Sửa (PUT), không thì là Thêm mới (POST)
             const url = event 
-                ? `http://localhost:5000/api/events/${event._id}` 
-                : "http://localhost:5000/api/events";
+                ? `https://final-assignment-x6nf.onrender.com/api/events/${event._id}` 
+                : "https://final-assignment-x6nf.onrender.com/api/events";
             
             const method = event ? "PUT" : "POST";
 
