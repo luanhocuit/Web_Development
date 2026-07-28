@@ -1,0 +1,231 @@
+/* ===========================================
+                OVERVIEW
+=========================================== */
+
+.stats-overview{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:24px;
+
+    margin-bottom:35px;
+
+}
+
+.stats-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:24px;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.stats-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.stats-card h3{
+
+    color:#6b7280;
+
+    font-size:15px;
+
+    margin-bottom:12px;
+
+}
+
+.stats-card h2{
+
+    color:#111827;
+
+    font-size:30px;
+
+    font-weight:700;
+
+}
+
+/* ===========================================
+                CHART
+=========================================== */
+
+.chart-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:25px;
+
+    margin-bottom:25px;
+
+}
+
+.chart-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.chart-card h2{
+
+    margin-bottom:20px;
+
+    color:#111827;
+
+    font-size:22px;
+
+}
+
+/* ===========================================
+            LIVE EVENT
+=========================================== */
+
+.live-event{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#eff6ff;
+
+    border-left:6px solid #2563eb;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    margin-top:15px;
+
+}
+
+.live-event h3{
+
+    color:#111827;
+
+    margin-bottom:8px;
+
+}
+
+.live-event p{
+
+    color:#6b7280;
+
+}
+
+.live-event span{
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+/* ===========================================
+            TABLE (DỰ PHÒNG)
+=========================================== */
+
+.statistics-table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+.statistics-table th{
+
+    background:#f3f4f6;
+
+    padding:14px;
+
+    text-align:left;
+
+    color:#374151;
+
+}
+
+.statistics-table td{
+
+    padding:14px;
+
+    border-bottom:1px solid #e5e7eb;
+
+}
+
+.statistics-table tr:hover{
+
+    background:#f9fafb;
+
+}
+
+/* ===========================================
+            RESPONSIVE
+=========================================== */
+
+@media(max-width:1200px){
+
+    .stats-overview{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:900px){
+
+    .chart-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .live-event{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:15px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .stats-overview{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

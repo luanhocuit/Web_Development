@@ -1,0 +1,259 @@
+/* ===========================================
+                SEARCH
+=========================================== */
+
+.member-search{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    background:white;
+
+    padding:15px 20px;
+
+    border-radius:14px;
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:30px;
+
+}
+
+.member-search svg{
+
+    color:var(--primary);
+
+    font-size:18px;
+
+}
+
+.member-search input{
+
+    flex:1;
+
+    font-size:15px;
+
+}
+
+/* ===========================================
+                GRID
+=========================================== */
+
+.member-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+
+    gap:25px;
+
+}
+
+/* ===========================================
+                CARD
+=========================================== */
+
+.member-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+    padding:28px;
+
+    text-align:center;
+
+    transition:.25s;
+
+}
+
+.member-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+/* ===========================================
+                AVATAR
+=========================================== */
+
+.member-avatar{
+
+    width:110px;
+
+    height:110px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    margin:auto;
+
+    border:5px solid #eff6ff;
+
+    margin-bottom:20px;
+
+}
+
+.member-card h2{
+
+    margin-bottom:12px;
+
+    color:#111827;
+
+}
+
+/* ===========================================
+                ROLE
+=========================================== */
+
+.role{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    margin-bottom:20px;
+
+}
+
+.role.lead{
+
+    background:#fef3c7;
+
+    color:#b45309;
+
+}
+
+.role.member{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
+
+/* ===========================================
+                INFO
+=========================================== */
+
+.member-info{
+
+    background:#f8fafc;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    margin-bottom:22px;
+
+}
+
+.member-info strong{
+
+    color:#374151;
+
+}
+
+.member-info p{
+
+    margin-top:6px;
+
+    color:#6b7280;
+
+}
+
+/* ===========================================
+                FOOTER
+=========================================== */
+
+.member-footer{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.member-footer button{
+
+    flex:1;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+/* ===========================================
+                EDIT
+=========================================== */
+
+.edit-btn{
+
+    background:#dbeafe;
+
+    color:#2563eb;
+
+}
+
+.edit-btn:hover{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+/* ===========================================
+                DELETE
+=========================================== */
+
+.delete-btn{
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+}
+
+.delete-btn:hover{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+/* ===========================================
+                RESPONSIVE
+=========================================== */
+
+@media(max-width:768px){
+
+    .member-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}

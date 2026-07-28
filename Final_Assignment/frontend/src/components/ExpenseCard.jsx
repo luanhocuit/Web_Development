@@ -1,0 +1,68 @@
+import {
+    FaMoneyBillWave,
+    FaUser,
+    FaUsers,
+    FaCalendarAlt,
+    FaEdit,
+    FaTrash
+} from "react-icons/fa";
+
+function ExpenseCard({ expense, onEdit, onDelete }) {
+    // Đảm bảo không bị lỗi chia cho 0
+    const memberCount = expense.members > 0 ? expense.members : 1;
+    const eachPerson = Math.round((expense.amount || 0) / memberCount);
+
+    return (
+        <div className="expense-card">
+            <div className="expense-top">
+                <div>
+                    <h2>{expense.title}</h2>
+                    <p>Khoản chi của chuyến đi</p>
+                </div>
+                <div className="expense-price">
+                    {(expense.amount || 0).toLocaleString()} VNĐ
+                </div>
+            </div>
+            <div className="expense-body">
+                <div className="expense-item">
+                    <FaUser />
+                    <span>
+                        Người thanh toán:
+                        <strong> {expense.payer}</strong>
+                    </span>
+                </div>
+                <div className="expense-item">
+                    <FaUsers />
+                    <span>
+                        Thành viên tham gia:
+                        <strong> {expense.members}</strong>
+                    </span>
+                </div>
+                <div className="expense-item">
+                    <FaCalendarAlt />
+                    <span>
+                        Ngày:
+                        <strong> {expense.date}</strong>
+                    </span>
+                </div>
+                <div className="expense-item">
+                    <FaMoneyBillWave />
+                    <span>
+                        Mỗi người cần trả:
+                        <strong> {eachPerson.toLocaleString()} VNĐ</strong>
+                    </span>
+                </div>
+            </div>
+            <div className="expense-footer">
+                <button className="edit-btn" onClick={() => onEdit(expense)}>
+                    <FaEdit /> Sửa
+                </button>
+                <button className="delete-btn" onClick={() => onDelete(expense._id || expense.id)}>
+                    <FaTrash /> Xóa
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export default ExpenseCard;

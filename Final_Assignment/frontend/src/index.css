@@ -1,0 +1,130 @@
+/* ===========================================
+                RESET CSS
+=========================================== */
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:
+        "Segoe UI",
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
+
+    background:#f5f7fb;
+
+    color:#1f2937;
+
+    overflow-x:hidden;
+
+    -webkit-font-smoothing:antialiased;
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+button{
+
+    font-family:inherit;
+
+    cursor:pointer;
+
+}
+
+input,
+textarea,
+select,
+button{
+
+    outline:none;
+
+    border:none;
+
+    font-family:inherit;
+
+}
+
+ul,
+ol{
+
+    list-style:none;
+
+}
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
+}
+
+table{
+
+    border-collapse:collapse;
+
+}
+
+/* ===========================================
+                SCROLLBAR
+=========================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#edf2f7;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#2563eb;
+
+    border-radius:10px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* ===========================================
+            TEXT SELECTION
+=========================================== */
+
+::selection{
+
+    background:#2563eb;
+
+    color:white;
+
+}
