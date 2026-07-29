@@ -10,18 +10,15 @@ function HoSo() {
         const fetchProfile = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const userId = localStorage.getItem("userId");
-
-                // Kiểm tra xem đã có đủ thông tin đăng nhập chưa
-                if (!token || !userId) {
+                if (!token) {
                     setLoading(false);
                     return;
                 }
 
-                // Dùng biến môi trường để gọi API
                 const apiUrl = import.meta.env.VITE_API_URL;
                 
-                const response = await fetch(`${apiUrl}/api/users/${userId}`, {
+                // Gọi vào đúng endpoint /api/users/profile chuẩn backend
+                const response = await fetch(`${apiUrl}/api/users/profile`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -34,7 +31,7 @@ function HoSo() {
                 if (response.ok) {
                     setProfile(data.user || data);
                 } else {
-                    console.error("Backend trả về lỗi:", data.message);
+                    console.error("Lỗi từ server:", data.message);
                 }
             } catch (error) {
                 console.error("Lỗi lấy thông tin hồ sơ:", error);

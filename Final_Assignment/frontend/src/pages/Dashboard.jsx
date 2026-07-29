@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaCalendarCheck, FaUsers, FaMoneyBillWave, FaPlayCircle, FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "../styles/dashboard.css";
 
 function Dashboard() {
@@ -11,17 +12,18 @@ function Dashboard() {
         ongoingEvents: 0
     });
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
                 const token = localStorage.getItem("token");
                 const headers = { "Authorization": `Bearer ${token}` };
+                const apiUrl = import.meta.env.VITE_API_URL;
 
-                // Thay bằng API route thực tế của bạn
                 const [statsRes, eventsRes] = await Promise.all([
-                    fetch("https://final-assignment-x6nf.onrender.com/api/stats/dashboard", { headers }),
-                    fetch("https://final-assignment-x6nf.onrender.com/api/events/today", { headers })
+                    fetch(`${apiUrl}/api/stats/dashboard`, { headers }),
+                    fetch(`${apiUrl}/api/events/today`, { headers })
                 ]);
 
                 if (statsRes.ok && eventsRes.ok) {
@@ -96,7 +98,8 @@ function Dashboard() {
                         <h3>Sự kiện tiếp theo</h3>
                         <h2>{events[0]?.title || "Chưa có sự kiện"}</h2>
                         <p>{events[0]?.time || "--:--"} - {events[0]?.endTime || "--:--"}</p>
-                        <button>
+                        {/* Gắn sự kiện chuyển hướng sang trang Quản lý Sự kiện khi bấm nút */}
+                        <button onClick={() => navigate("/su-kien")}>
                             Xem chi tiết <FaArrowRight />
                         </button>
                     </div>

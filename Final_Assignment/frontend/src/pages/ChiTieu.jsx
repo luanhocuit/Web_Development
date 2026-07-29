@@ -1,18 +1,22 @@
 import { useState, useEffect } from "react";
 import { FaPlus, FaWallet } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import ExpenseCard from "../components/ExpenseCard";
 import "../styles/expense.css";
 
 function ChiTieu() {
     const [expenses, setExpenses] = useState([]);
-    const [summary, setSummary] = useState({ total: 0, topSpender: "", topAmount: 0 });
+    const [summary, setSummary] = useState({ total: 0, topSpender: "Đang cập nhật", topAmount: 0 });
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchExpenses = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await fetch("https://final-assignment-x6nf.onrender.com/api/expenses", {
+                const apiUrl = import.meta.env.VITE_API_URL;
+
+                const response = await fetch(`${apiUrl}/api/expenses`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -25,9 +29,7 @@ function ChiTieu() {
                     const expList = data.expenses || data;
                     setExpenses(expList);
                     
-                    // Tính toán sơ bộ nếu Backend không trả sẵn cục Summary
                     const total = expList.reduce((acc, curr) => acc + (curr.amount || 0), 0);
-                    // Có thể thêm logic tìm người chi nhiều nhất ở đây
                     setSummary({ total, topSpender: "Đang cập nhật", topAmount: 0 });
                 }
             } catch (error) {
@@ -40,6 +42,17 @@ function ChiTieu() {
         fetchExpenses();
     }, []);
 
+    // Xử lý sự kiện khi bấm nút Thêm khoản chi
+    const handleAddExpenseClick = () => {
+        // Bạn có thể đổi logic này thành mở Modal nếu dự án có dùng Modal
+        const title = prompt("Nhập tên khoản chi:");
+        const amount = prompt("Nhập số tiền (VNĐ):");
+        
+        if (title && amount) {
+            alert(`Đã ghi nhận khoản chi: ${title} - ${Number(amount).toLocaleString()}đ. (Hãy nối API POST vào đây để lưu vào Database)`);
+        }
+    };
+
     return (
         <div>
             <div className="page-header">
@@ -47,7 +60,8 @@ function ChiTieu() {
                     <h1 className="page-title">Quản lý chi tiêu</h1>
                     <p className="page-subtitle">Theo dõi toàn bộ chi phí chuyến đi.</p>
                 </div>
-                <button className="btn">
+                {/* Đã gán sự kiện bấm cho nút Thêm khoản chi */}
+                <button className="btn" onClick={handleAddExpenseClick}>
                     <FaPlus /> Thêm khoản chi
                 </button>
             </div>
