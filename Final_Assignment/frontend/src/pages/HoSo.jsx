@@ -3,7 +3,6 @@ import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaUserTie, FaEdit, FaCamer
 import "../styles/profile.css";
 
 function HoSo() {
-    // Khởi tạo sẵn thông tin từ localStorage để trang web luôn mượt mà, không bị trắng trang
     const [profile, setProfile] = useState({
         name: localStorage.getItem("userName") || "Người dùng",
         role: localStorage.getItem("role") === "Lead" ? "Trưởng nhóm" : "Thành viên",
@@ -11,11 +10,48 @@ function HoSo() {
         phone: "Chưa cập nhật",
         address: "Đà Nẵng, Việt Nam",
         avatar: "https://i.pravatar.cc/250?img=15",
-        eventsAttended: 5,
-        totalSpent: 2500000,
-        friendsCount: 8,
+        // Đưa các thông số về mặc định là 0 như yêu cầu
+        eventsAttended: 0,
+        totalSpent: 0,
+        friendsCount: 0,
         createdAt: "2026"
     });
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [editForm, setEditForm] = useState(profile);
+
+    // Đồng bộ form khi modal chỉnh sửa mở ra
+    const handleOpenEdit = () => {
+        setEditForm(profile);
+        setIsEditing(true);
+    };
+
+    const handleChange = (e) => {
+        setEditForm({
+            ...editForm,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    // Xử lý lưu thông tin chỉnh sửa (cập nhật trực tiếp giao diện và localStorage)
+    const handleSaveEdit = (e) => {
+        e.preventDefault();
+        setProfile(editForm);
+        if (editForm.name) {
+            localStorage.setItem("userName", editForm.name);
+        }
+        setIsEditing(false);
+        alert("Cập nhật hồ sơ thành công!");
+    };
+
+    // Hàm đổi ảnh đại diện nhanh bằng cách nhập URL ảnh mới
+    const handleAvatarChange = () => {
+        const newAvatarUrl = prompt("Nhập đường dẫn (URL) ảnh đại diện mới của bạn:", profile.avatar);
+        if (newAvatarUrl) {
+            setProfile(prev => ({ ...prev, avatar: newAvatarUrl }));
+            alert("Đổi ảnh đại diện thành công!");
+        }
+    };
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -26,7 +62,6 @@ function HoSo() {
 
                 if (!token || !userId) return;
 
-                // Thử gọi ngầm API lấy dữ liệu chi tiết từ backend
                 const response = await fetch(`${apiUrl}/api/users/${userId}`, {
                     method: "GET",
                     headers: {
@@ -38,7 +73,6 @@ function HoSo() {
                 if (response.ok) {
                     const data = await response.json();
                     const userData = data.user || data;
-                    // Cập nhật lại bằng dữ liệu thật từ Database nếu có
                     setProfile(prev => ({
                         ...prev,
                         ...userData
@@ -65,12 +99,14 @@ function HoSo() {
                             alt="avatar"
                             className="profile-avatar"
                         />
-                        <button className="avatar-btn">
+                        {/* Nút icon máy ảnh đổi ảnh hoạt động */}
+                        <button className="avatar-btn" onClick={handleAvatarChange} title="Đổi ảnh đại diện">
                             <FaCamera />
                         </button>
                         <h2>{profile.name || "Người dùng"}</h2>
                         <span className="profile-role">{profile.role || "Thành viên"}</span>
-                        <button className="btn">
+                        {/* Nút Chỉnh sửa hồ sơ hoạt động */}
+                        <button className="btn" onClick={handleOpenEdit}>
                             <FaEdit /> Chỉnh sửa hồ sơ
                         </button>
                     </div>
@@ -107,6 +143,7 @@ function HoSo() {
                         </div>
                     </div>
 
+                    {/* 3 thông số dưới đã về mặc định 0 */}
                     <div className="profile-stats">
                         <div className="stat-box">
                             <FaMedal />
@@ -126,6 +163,59 @@ function HoSo() {
                     </div>
                 </div>
             </div>
+
+            {/* MODAL CHỈNH SỬA HỒ SƠ */}
+            {isEditing && (
+                <div className="modal-overlay">
+                    <div className="event-modal" style={{ maxWidth: '450px' }}>
+                        <div className="modal-header">
+                            <h2>Chỉnh sửa hồ sơ</h2>
+                            <button className="close-btn" onClick={() => setIsEditing(false)}>✕</button>
+                        </div>
+                        <form onSubmit={handleSaveEdit}>
+                            <div className="form-group" style={{ marginBottom: '15px' }}>
+                                <label>Họ và tên</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={editForm.name}
+                                    onChange={handleChange}
+                                    required
+                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+                                />
+                            </div>
+                            <div className="form-group" style={{ marginBottom: '15px' }}>
+                                <label>Số điện thoại</label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    value={editForm.phone}
+                                    onChange={handleChange}
+                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+                                />
+                            </div>
+                            <div className="form-group" style={{ marginBottom: '20px' }}>
+                                <label>Địa chỉ</label>
+                                <input
+                                    type="text"
+                                    name="address"
+                                    value={editForm.address}
+                                    onChange={handleChange}
+                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+                                />
+                            </div>
+                            <div className="modal-footer" style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                                <button type="button" className="cancel-btn" onClick={() => setIsEditing(false)} style={{ padding: '8px 16px', background: '#ccc', borderRadius: '8px' }}>
+                                    Hủy
+                                </button>
+                                <button type="submit" className="save-btn" style={{ padding: '8px 16px', background: '#2563eb', color: '#fff', borderRadius: '8px' }}>
+                                    Lưu thay đổi
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
