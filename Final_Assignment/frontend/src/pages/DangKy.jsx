@@ -39,7 +39,7 @@ function DangKy() {
         // 2. Gọi API xuống Backend
         try {
             // Sử dụng biến môi trường VITE_API_URL để dễ dàng deploy
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
