@@ -17,6 +17,8 @@ function Navbar() {
     const currentRole = localStorage.getItem("role");
     const roleDisplay = currentRole === "Lead" ? "Trưởng nhóm" : "Thành viên";
 
+    const currentName = localStorage.getItem("userName") || "Thành viên ẩn danh";
+
     const today = new Date().toLocaleDateString("vi-VN", {
         weekday: "long",
         day: "2-digit",
@@ -62,7 +64,7 @@ function Navbar() {
                         alt="avatar"
                     />
                     <div>
-                        <h4>Nguyễn Văn A</h4>
+                        <h4>{currentName}</h4>
                         <span>{roleDisplay}</span>
                     </div>
                 </div>

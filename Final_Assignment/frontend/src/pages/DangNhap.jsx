@@ -40,6 +40,8 @@ function DangNhap() {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("role", data.role);
                 localStorage.setItem("userId", data._id);
+
+                localStorage.setItem("userName", data.name || "Khách");
                 
                 alert("Đăng nhập thành công!");
                 // Mở khóa bảo vệ và cho phép vào Dashboard
