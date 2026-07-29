@@ -3,9 +3,10 @@ import {
     FaSearch,
     FaMoon,
     FaSun,
-    FaSignOutAlt
+    FaSignOutAlt,
+    FaCog // Trong ảnh bạn có dùng icon bánh răng
 } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/navbar.css";
 
@@ -13,11 +14,9 @@ function Navbar() {
     const [darkMode, setDarkMode] = useState(false);
     const navigate = useNavigate();
 
-    // Lấy chức vụ từ localStorage để hiển thị linh hoạt
     const currentRole = localStorage.getItem("role");
     const roleDisplay = currentRole === "Lead" ? "Trưởng nhóm" : "Thành viên";
-
-    const currentName = localStorage.getItem("userName") || "Thành viên ẩn danh";
+    const currentName = localStorage.getItem("userName") || "Thành viên";
 
     const today = new Date().toLocaleDateString("vi-VN", {
         weekday: "long",
@@ -26,11 +25,17 @@ function Navbar() {
         year: "numeric"
     });
 
-    // Hàm xử lý Đăng xuất
+    // Xử lý Dark Mode tác động trực tiếp lên giao diện (thẻ body)
+    useEffect(() => {
+        if (darkMode) {
+            document.body.classList.add("dark-theme");
+        } else {
+            document.body.classList.remove("dark-theme");
+        }
+    }, [darkMode]);
+
     const handleLogout = () => {
-        // Xóa sạch dữ liệu lưu ở LocalStorage
         localStorage.clear();
-        // Điều hướng về trang đăng nhập
         navigate("/dang-nhap");
     };
 
@@ -46,14 +51,21 @@ function Navbar() {
                     <input type="text" placeholder="Tìm kiếm..." />
                 </div>
                 
+                {/* Nút Dark/Light Mode */}
                 <button 
                     className="icon-btn" 
                     onClick={() => setDarkMode(!darkMode)}
+                    title="Chế độ Tối/Sáng"
                 >
                     {darkMode ? <FaSun /> : <FaMoon />}
                 </button>
                 
-                <button className="icon-btn">
+                {/* Nút Thông báo */}
+                <button 
+                    className="icon-btn"
+                    onClick={() => alert("Hiện tại chưa có thông báo mới nào!")}
+                    title="Thông báo"
+                >
                     <FaBell />
                     <span className="notify">3</span>
                 </button>

@@ -626,3 +626,63 @@ tr:hover{
     }
 
 }
+
+/* ===========================================
+                DARK THEME
+=========================================== */
+body.dark-theme {
+    background-color: #121212;
+    color: #e5e7eb;
+}
+
+/* Đổi màu nền các khối trắng sang xám đậm */
+body.dark-theme .card,
+body.dark-theme .navbar,
+body.dark-theme .sidebar,
+body.dark-theme .auth-card {
+    background-color: #1f2937;
+    color: #f3f4f6;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Chỉnh màu chữ các tiêu đề */
+body.dark-theme .page-title,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4 {
+    color: #ffffff;
+}
+
+body.dark-theme .page-subtitle,
+body.dark-theme .text-light {
+    color: #9ca3af;
+}
+
+/* Chỉnh màu các ô input, form */
+body.dark-theme input,
+body.dark-theme textarea,
+body.dark-theme select {
+    background-color: #374151;
+    color: #ffffff;
+    border-color: #4b5563;
+}
+
+body.dark-theme input::placeholder {
+    color: #9ca3af;
+}
+
+/* Chỉnh màu bảng biểu (Table) */
+body.dark-theme th {
+    background-color: #374151;
+    color: #e5e7eb;
+    border-bottom: 1px solid #4b5563;
+}
+
+body.dark-theme td {
+    border-bottom: 1px solid #374151;
+}
+
+body.dark-theme tr:hover {
+    background-color: #4b5563;
+}
