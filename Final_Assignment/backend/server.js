@@ -8,11 +8,17 @@ const startCronJob = require('./jobs/cron');
 const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const statRoutes = require('./routes/statRoutes');
-const expenseRoutes = require('./routes/expenseRoutes'); // 👈 MỚI THÊM: Import route chi tiêu
+const expenseRoutes = require('./routes/expenseRoutes'); 
 
 const app = express();
 
-app.use(cors());
+// Cấu hình CORS chuẩn chỉ cho phép Vercel và Localhost đi qua
+app.use(cors({
+    origin: ["https://final-assignment-lyart-psi.vercel.app", "http://localhost:5173"], 
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true 
+}));
+
 app.use(express.json());
 
 // Kết nối DB và chạy Realtime Engine
@@ -23,7 +29,7 @@ startCronJob();
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/stats', statRoutes);
-app.use('/api/expenses', expenseRoutes); // 👈 MỚI THÊM: Gắn endpoint API cho chi tiêu
+app.use('/api/expenses', expenseRoutes); 
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
