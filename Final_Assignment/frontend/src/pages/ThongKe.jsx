@@ -39,7 +39,7 @@ function ThongKe() {
             try {
                 const token = localStorage.getItem("token");
                 // Gọi API lấy thống kê từ Backend của bạn
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/stats`, {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/stats/dashboard`, {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }

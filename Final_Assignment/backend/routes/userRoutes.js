@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
 
-// Lấy danh sách thành viên (GET)
 router.get('/', userController.getAllUsers);
 
-// --- PHẦN MỚI THÊM: Tạo thành viên mới (POST) ---
-router.post('/', userController.createUser);
+// THÊM DÒNG NÀY: Lấy chi tiết 1 user theo ID
+router.get('/:id', userController.getUserById); 
 
-// Cập nhật phân công thành viên (PUT)
+router.post('/', userController.createUser);
 router.put('/:id', userController.updateUserTask);
 
 module.exports = router;

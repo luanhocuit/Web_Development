@@ -9,6 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const statRoutes = require('./routes/statRoutes');
 const expenseRoutes = require('./routes/expenseRoutes'); 
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -29,7 +30,8 @@ startCronJob();
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/stats', statRoutes);
-app.use('/api/expenses', expenseRoutes); 
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/users', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

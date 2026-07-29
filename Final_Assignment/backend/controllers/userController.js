@@ -1,5 +1,5 @@
 const User = require('../models/User');
-
+const bcrypt = require('bcryptjs');
 // Lấy danh sách toàn bộ thành viên (loại bỏ password để bảo mật)
 exports.getAllUsers = async (req, res) => {
     try {
@@ -36,12 +36,17 @@ exports.createUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
 
-        // Tạo user mới
+        // 1. CHUẨN BỊ MẬT KHẨU VÀ BĂM (HASH) NÓ
+        const rawPassword = password || '123456'; 
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(rawPassword, salt);
+
+        // 2. TẠO USER VỚI MẬT KHẨU ĐÃ BĂM
         const newUser = new User({
             name,
             email,
-            password: password || '123456', // Nếu không nhập mk thì mặc định là 123456
-            role: role || 'Thành viên'
+            password: hashedPassword, // Lưu mật khẩu đã băm
+            role // Đã xóa default 'Thành viên' ở đây vì sẽ bị lỗi Enum (xem phần 3)
         });
 
         const savedUser = await newUser.save();
@@ -55,12 +60,22 @@ exports.createUser = async (req, res) => {
         });
 
     } catch (error) {
-        // BẮT LỖI E11000 TỪ DATABASE (Trùng Email)
         if (error.code === 11000) {
             return res.status(400).json({ 
                 message: "Email này đã có người sử dụng. Vui lòng nhập email khác!" 
             });
         }
         res.status(500).json({ message: 'Lỗi hệ thống khi tạo thành viên', error });
+    }
+};
+exports.getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'Không tìm thấy thành viên này' });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi khi lấy thông tin thành viên', error });
     }
 };

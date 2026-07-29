@@ -1,10 +1,13 @@
 const express = require('express');
-const { createEvent, getEvents, updateEvent, deleteEvent } = require('../controllers/eventController');
+// Nhớ import thêm hàm getEventsToday từ controller (nếu bạn đã viết)
+const { createEvent, getEvents, updateEvent, deleteEvent, getEventsToday } = require('../controllers/eventController');
 const { protect } = require('../middlewares/auth');
 const router = express.Router();
 
-// Tất cả thao tác Event đều cần Auth
 router.use(protect); 
+
+// THÊM DÒNG NÀY (Để xử lý API /api/events/today)
+router.get('/today', getEventsToday); 
 
 router.post('/', createEvent);
 router.get('/', getEvents);
