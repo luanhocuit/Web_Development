@@ -86,3 +86,25 @@ exports.getEvents = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// [GET] Lấy danh sách sự kiện diễn ra trong ngày hôm nay
+exports.getEventsToday = async (req, res) => {
+  try {
+    // 1. Tạo mốc thời gian bắt đầu (00:00:00) và kết thúc (23:59:59) của ngày hôm nay
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    // 2. Tìm sự kiện có startTime nằm trong ngày hôm nay
+    const todayEvents = await Event.find({
+      startTime: { $gte: startOfDay, $lte: endOfDay }
+    })
+    .populate('creator assignees payer', 'name email role')
+    .sort('startTime');
+
+    res.json(todayEvents);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
