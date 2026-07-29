@@ -10,15 +10,17 @@ function HoSo() {
         const fetchProfile = async () => {
             try {
                 const token = localStorage.getItem("token");
-                if (!token) {
+                const userId = localStorage.getItem("userId");
+
+                if (!token || !userId) {
                     setLoading(false);
                     return;
                 }
 
                 const apiUrl = import.meta.env.VITE_API_URL;
                 
-                // Gọi vào đúng endpoint /api/users/profile chuẩn backend
-                const response = await fetch(`${apiUrl}/api/users/profile`, {
+                // Trả lại đúng chuẩn dùng userId theo cấu trúc Backend của bạn
+                const response = await fetch(`${apiUrl}/api/users/${userId}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
