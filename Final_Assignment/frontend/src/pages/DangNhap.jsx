@@ -60,7 +60,6 @@ function DangNhap() {
                 <div className="auth-left">
                     <h1>Trip Planner</h1>
                     <p>Quản lý chuyến đi thông minh, đồng bộ lịch trình, thành viên và chi phí trên một nền tảng duy nhất.</p>
-                    <img src="https://illustrations.popsy.co/blue/travel.svg" alt="travel" />
                 </div>
                 <div className="auth-right">
                     <h2>Đăng nhập</h2>

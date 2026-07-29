@@ -75,7 +75,6 @@ function DangKy() {
                 <div className="auth-left">
                     <h1>Trip Planner</h1>
                     <p>Tạo tài khoản để bắt đầu quản lý lịch trình, thành viên và chi phí chuyến đi của bạn.</p>
-                    <img src="https://illustrations.popsy.co/blue/team-work.svg" alt="register" />
                 </div>
                 <div className="auth-right">
                     <h2>Đăng ký</h2>

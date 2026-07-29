@@ -34,7 +34,6 @@ function QuenMatKhau() {
                 <div className="auth-left">
                     <h1>Trip Planner</h1>
                     <p>Khôi phục quyền truy cập vào tài khoản để tiếp tục quản lý hành trình của bạn.</p>
-                    <img src="https://illustrations.popsy.co/blue/key.svg" alt="forgot-password" />
                 </div>
                 <div className="auth-right">
                     <h2>Quên mật khẩu?</h2>
