@@ -2,6 +2,7 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 import DangNhap from "./pages/DangNhap";
 import DangKy from "./pages/DangKy";
+import QuenMatKhau from "./pages/QuenMatKhau"; // 1. Import trang Quên mật khẩu
 
 import Dashboard from "./pages/Dashboard";
 import SuKien from "./pages/SuKien";
@@ -52,6 +53,16 @@ function App() {
                 element={
                     <PublicRoute>
                         <DangKy />
+                    </PublicRoute>
+                } 
+            />
+
+            {/* 2. Thêm Route cho trang Quên mật khẩu */}
+            <Route 
+                path="/quen-mat-khau" 
+                element={
+                    <PublicRoute>
+                        <QuenMatKhau />
                     </PublicRoute>
                 } 
             />

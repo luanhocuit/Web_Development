@@ -95,12 +95,22 @@ function DangNhap() {
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
                         </div>
-                        <div className="remember-box">
-                            <label>
+                        <div 
+                            className="remember-box" 
+                            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '20px' }}
+                        >
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', margin: 0 }}>
                                 <input type="checkbox" />
-                                Ghi nhớ đăng nhập
+                                <span>Ghi nhớ đăng nhập</span>
                             </label>
-                            <a href="#">Quên mật khẩu?</a>
+                            
+                            {/* Thay <a> bằng <Link> để chuyển trang không bị load lại */}
+                            <Link 
+                                to="/quen-mat-khau" 
+                                style={{ color: '#2563EB', textDecoration: 'none', fontWeight: '500' }}
+                            >
+                                Quên mật khẩu?
+                            </Link>
                         </div>
                         
                         {/* Nút đăng nhập phải là type="submit" */}
