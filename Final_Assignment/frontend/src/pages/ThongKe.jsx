@@ -17,31 +17,15 @@ import "../styles/statistic.css";
 function ThongKe() {
     // Dữ liệu tĩnh của bạn được dùng làm fallback/giá trị khởi tạo
     const [overview, setOverview] = useState({
-        totalEvents: 15,
-        totalMembers: 8,
-        totalCost: 5500000,
-        liveEventsCount: 1
+        totalEvents: 0,
+        totalMembers: 0,
+        totalCost: 0,
+        liveEventsCount: 0
     });
 
-    const [eventData, setEventData] = useState([
-        { name: "Ăn uống", value: 5 },
-        { name: "Ngắm cảnh", value: 3 },
-        { name: "Bonding", value: 4 },
-        { name: "Di chuyển", value: 2 }
-    ]);
-
-    const [statusData, setStatusData] = useState([
-        { name: "Đã hoàn thành", value: 8 },
-        { name: "Đang diễn ra", value: 2 },
-        { name: "Sắp diễn ra", value: 5 },
-        { name: "Tạm hoãn", value: 1 }
-    ]);
-
-    const [liveEvent, setLiveEvent] = useState({
-        title: "Tắm biển Mỹ Khê",
-        time: "09:00 - 11:00",
-        status: "Đang diễn ra"
-    });
+    const [eventData, setEventData] = useState([]);
+    const [statusData, setStatusData] = useState([]);
+    const [liveEvent, setLiveEvent] = useState(null);
 
     const COLORS = [
         "#2563eb",

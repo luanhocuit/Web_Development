@@ -10,8 +10,18 @@ function HoSo() {
         const fetchProfile = async () => {
             try {
                 const token = localStorage.getItem("token");
-                // Gọi API lấy thông tin của chính User đang login
-                const response = await fetch("https://final-assignment-x6nf.onrender.com/api/users/profile", {
+                const userId = localStorage.getItem("userId");
+
+                // Kiểm tra xem đã có đủ thông tin đăng nhập chưa
+                if (!token || !userId) {
+                    setLoading(false);
+                    return;
+                }
+
+                // Dùng biến môi trường để gọi API
+                const apiUrl = import.meta.env.VITE_API_URL;
+                
+                const response = await fetch(`${apiUrl}/api/users/${userId}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -20,8 +30,11 @@ function HoSo() {
                 });
 
                 const data = await response.json();
+                
                 if (response.ok) {
                     setProfile(data.user || data);
+                } else {
+                    console.error("Backend trả về lỗi:", data.message);
                 }
             } catch (error) {
                 console.error("Lỗi lấy thông tin hồ sơ:", error);
