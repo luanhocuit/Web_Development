@@ -1,36 +1,40 @@
 import { useState, useEffect } from "react";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import MemberCard from "../components/MemberCard";
+import Modal from "../components/Modal";
 import "../styles/member.css";
 
 function ThanhVien() {
     const [search, setSearch] = useState("");
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false); // Quản lý trạng thái đóng/mở Modal
+
+    const fetchMembers = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const apiUrl = import.meta.env.VITE_API_URL;
+
+            const response = await fetch(`${apiUrl}/api/users`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                setMembers(data.users || data);
+            }
+        } catch (error) {
+            console.error("Lỗi lấy danh sách thành viên:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchMembers = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const response = await fetch("https://final-assignment-x6nf.onrender.com/api/users", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    setMembers(data.users || data);
-                }
-            } catch (error) {
-                console.error("Lỗi lấy danh sách thành viên:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchMembers();
     }, []);
 
@@ -46,7 +50,8 @@ function ThanhVien() {
                     <h1 className="page-title">Quản lý thành viên</h1>
                     <p className="page-subtitle">Danh sách tất cả thành viên tham gia chuyến đi.</p>
                 </div>
-                <button className="btn">
+                {/* Nút bật Modal Thêm thành viên */}
+                <button className="btn" onClick={() => setIsModalOpen(true)}>
                     <FaPlus /> Thêm thành viên
                 </button>
             </div>
@@ -74,6 +79,14 @@ function ThanhVien() {
                     )}
                 </div>
             )}
+
+            {/* Gọi Component Modal */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSave={fetchMembers}
+                type="member"
+            />
         </div>
     );
 }

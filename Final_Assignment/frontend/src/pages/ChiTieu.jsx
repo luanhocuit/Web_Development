@@ -1,57 +1,46 @@
 import { useState, useEffect } from "react";
 import { FaPlus, FaWallet } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import ExpenseCard from "../components/ExpenseCard";
+import Modal from "../components/Modal";
 import "../styles/expense.css";
 
 function ChiTieu() {
     const [expenses, setExpenses] = useState([]);
     const [summary, setSummary] = useState({ total: 0, topSpender: "Đang cập nhật", topAmount: 0 });
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false); // Quản lý trạng thái mở Modal
 
-    useEffect(() => {
-        const fetchExpenses = async () => {
-            try {
-                const token = localStorage.getItem("token");
-                const apiUrl = import.meta.env.VITE_API_URL;
+    const fetchExpenses = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const apiUrl = import.meta.env.VITE_API_URL;
 
-                const response = await fetch(`${apiUrl}/api/expenses`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-
-                const data = await response.json();
-                if (response.ok) {
-                    const expList = data.expenses || data;
-                    setExpenses(expList);
-                    
-                    const total = expList.reduce((acc, curr) => acc + (curr.amount || 0), 0);
-                    setSummary({ total, topSpender: "Đang cập nhật", topAmount: 0 });
+            const response = await fetch(`${apiUrl}/api/expenses`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
                 }
-            } catch (error) {
-                console.error("Lỗi lấy danh sách chi tiêu:", error);
-            } finally {
-                setLoading(false);
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                const expList = data.expenses || data;
+                setExpenses(expList);
+                
+                const total = expList.reduce((acc, curr) => acc + (curr.amount || 0), 0);
+                setSummary({ total, topSpender: "Đang cập nhật", topAmount: 0 });
             }
-        };
-
-        fetchExpenses();
-    }, []);
-
-    // Xử lý sự kiện khi bấm nút Thêm khoản chi
-    const handleAddExpenseClick = () => {
-        // Bạn có thể đổi logic này thành mở Modal nếu dự án có dùng Modal
-        const title = prompt("Nhập tên khoản chi:");
-        const amount = prompt("Nhập số tiền (VNĐ):");
-        
-        if (title && amount) {
-            alert(`Đã ghi nhận khoản chi: ${title} - ${Number(amount).toLocaleString()}đ. (Hãy nối API POST vào đây để lưu vào Database)`);
+        } catch (error) {
+            console.error("Lỗi lấy danh sách chi tiêu:", error);
+        } finally {
+            setLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchExpenses();
+    }, []);
 
     return (
         <div>
@@ -60,8 +49,8 @@ function ChiTieu() {
                     <h1 className="page-title">Quản lý chi tiêu</h1>
                     <p className="page-subtitle">Theo dõi toàn bộ chi phí chuyến đi.</p>
                 </div>
-                {/* Đã gán sự kiện bấm cho nút Thêm khoản chi */}
-                <button className="btn" onClick={handleAddExpenseClick}>
+                {/* Nút mở Modal Thêm khoản chi */}
+                <button className="btn" onClick={() => setIsModalOpen(true)}>
                     <FaPlus /> Thêm khoản chi
                 </button>
             </div>
@@ -99,6 +88,14 @@ function ChiTieu() {
                     )}
                 </div>
             )}
+
+            {/* Gọi Component Modal */}
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSave={fetchExpenses}
+                type="expense"
+            />
         </div>
     );
 }
