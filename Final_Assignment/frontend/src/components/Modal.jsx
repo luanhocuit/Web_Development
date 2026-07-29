@@ -12,20 +12,18 @@ function Modal({
     const [form, setForm] = useState({
         title: event?.title || "",
         description: event?.description || "",
-        start: event?.start || "",
-        end: event?.end || "",
+        start: event?.startTime || event?.start || "", // Hỗ trợ cả start và startTime
+        end: event?.endTime || event?.end || "",       // Hỗ trợ cả end và endTime
         location: event?.location || "",
-        category: event?.category || "Ăn uống",
+        category: event?.type || event?.category || "Ăn uống", // Hỗ trợ cả type và category
         status: event?.status || "Sắp diễn ra",
         members: event?.members || [],
         cost: event?.cost || "",
         payer: event?.payer || "",
-        // Thêm trường cho Thành viên mới
         name: "",
         email: "",
         password: "",
         role: "Thành viên",
-        // Thêm trường cho Khoản chi mới
         amount: "",
         expenseTitle: ""
     });
@@ -43,13 +41,9 @@ function Modal({
 
     const handleMembersChange = (e) => {
         const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-        setForm({
-            ...form,
-            members: selectedOptions
-        });
+        setForm({ ...form, members: selectedOptions });
     };
 
-    // Xử lý gửi API tùy theo loại Modal (Event, Member, hay Expense)
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -63,25 +57,45 @@ function Modal({
             let bodyData = {};
 
             if (type === "member") {
-                url = `${apiUrl}/api/users`; // API thêm thành viên
+                url = `${apiUrl}/api/users`;
                 bodyData = {
                     name: form.name,
                     email: form.email,
-                    password: form.password || "123456", // Mật khẩu mặc định nếu không nhập
+                    password: form.password || "123456",
                     role: form.role
                 };
             } else if (type === "expense") {
-                url = `${apiUrl}/api/expenses`; // API thêm khoản chi
+                url = `${apiUrl}/api/expenses`;
                 bodyData = {
                     title: form.expenseTitle,
                     amount: Number(form.amount),
                     payer: form.payer
                 };
             } else {
-                // Mặc định là Sự kiện
+                // ---- ĐÂY LÀ ĐOẠN KHẮC PHỤC LỖI TẠO SỰ KIỆN ----
                 url = event ? `${apiUrl}/api/events/${event._id}` : `${apiUrl}/api/events`;
                 method = event ? "PUT" : "POST";
-                bodyData = form;
+                
+                // Đổi tên các biến cho đúng chuẩn Backend yêu cầu
+                bodyData = {
+                    title: form.title,
+                    type: form.category,       // Đổi category -> type
+                    startTime: form.start,     // Đổi start -> startTime
+                    endTime: form.end,         // Đổi end -> endTime
+                    location: form.location,
+                    status: form.status,
+                    description: form.description
+                };
+
+                // Chỉ gửi cost nếu có nhập số tiền
+                if (form.cost) {
+                    bodyData.cost = Number(form.cost);
+                }
+
+                // Sửa lỗi "Cast to ObjectId": Chỉ gửi payer lên nếu thực sự có chọn người trả tiền (không gửi chuỗi rỗng "")
+                if (form.payer && form.payer.trim() !== "") {
+                    bodyData.payer = form.payer;
+                }
             }
 
             const response = await fetch(url, {
@@ -94,8 +108,8 @@ function Modal({
             });
 
             if (response.ok) {
-                onSave(); // Load lại dữ liệu trang cha
-                onClose(); // Đóng modal
+                onSave(); 
+                onClose(); 
             } else {
                 const data = await response.json();
                 alert(`Lỗi: ${data.message || "Không thể thực hiện thao tác"}`);
@@ -122,40 +136,21 @@ function Modal({
                     </button>
                 </div>
                 <form onSubmit={handleSubmit}>
+                    
                     {/* FORM THÊM THÀNH VIÊN */}
                     {type === "member" && (
                         <div className="form-grid">
                             <div>
                                 <label>Họ và tên *</label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    placeholder="Nhập tên thành viên"
-                                    value={form.name}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <input type="text" name="name" placeholder="Nhập tên thành viên" value={form.name} onChange={handleChange} required />
                             </div>
                             <div>
                                 <label>Email *</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="email@example.com"
-                                    value={form.email}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <input type="email" name="email" placeholder="email@example.com" value={form.email} onChange={handleChange} required />
                             </div>
                             <div>
                                 <label>Mật khẩu khởi tạo</label>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    placeholder="Mặc định: 123456"
-                                    value={form.password}
-                                    onChange={handleChange}
-                                />
+                                <input type="password" name="password" placeholder="Mặc định: 123456" value={form.password} onChange={handleChange} />
                             </div>
                             <div>
                                 <label>Vai trò</label>
@@ -172,35 +167,15 @@ function Modal({
                         <div className="form-grid">
                             <div className="full-width">
                                 <label>Tên khoản chi *</label>
-                                <input
-                                    type="text"
-                                    name="expenseTitle"
-                                    placeholder="Ví dụ: Ăn hải sản Mỹ Khê"
-                                    value={form.expenseTitle}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <input type="text" name="expenseTitle" placeholder="Ví dụ: Ăn hải sản Mỹ Khê" value={form.expenseTitle} onChange={handleChange} required />
                             </div>
                             <div>
                                 <label>Số tiền (VNĐ) *</label>
-                                <input
-                                    type="number"
-                                    name="amount"
-                                    placeholder="Ví dụ: 500000"
-                                    value={form.amount}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <input type="number" name="amount" placeholder="Ví dụ: 500000" value={form.amount} onChange={handleChange} required />
                             </div>
                             <div>
                                 <label>Người chi trả</label>
-                                <input
-                                    type="text"
-                                    name="payer"
-                                    placeholder="Tên người thanh toán"
-                                    value={form.payer}
-                                    onChange={handleChange}
-                                />
+                                <input type="text" name="payer" placeholder="Tên người thanh toán" value={form.payer} onChange={handleChange} />
                             </div>
                         </div>
                     )}
@@ -224,12 +199,13 @@ function Modal({
                                     </select>
                                 </div>
                                 <div>
-                                    <label>Giờ bắt đầu</label>
-                                    <input type="time" name="start" value={form.start} onChange={handleChange} />
+                                    {/* Đổi thành datetime-local để có thể lấy cả ngày lẫn giờ */}
+                                    <label>Giờ bắt đầu *</label>
+                                    <input type="datetime-local" name="start" value={form.start} onChange={handleChange} required />
                                 </div>
                                 <div>
-                                    <label>Giờ kết thúc</label>
-                                    <input type="time" name="end" value={form.end} onChange={handleChange} />
+                                    <label>Giờ kết thúc *</label>
+                                    <input type="datetime-local" name="end" value={form.end} onChange={handleChange} required />
                                 </div>
                                 <div>
                                     <label>Địa điểm</label>
