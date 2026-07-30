@@ -6,39 +6,32 @@ import {
     FaMoneyBillWave,
     FaUserTie,
     FaCheckCircle,
-    FaArrowUp,
-    FaArrowDown,
+    FaTimes, // THÊM ICON NÀY
     FaEdit,
     FaTrash
 } from "react-icons/fa";
 
 function EventCard({ event, onEdit, onDelete }) {
-    // 1. Cập nhật lại switch/case cho khớp với Enum status của Backend
     const getStatusClass = (status) => {
         switch (status) {
-            case "Đang diễn ra":
-                return "badge badge-success";
-            case "Sắp tới":
-                return "badge badge-info";
-            case "Đã xong":
-                return "badge badge-warning";
-            case "Tạm hoãn":
-                return "badge badge-secondary";
-            case "Hủy":
-                return "badge badge-danger";
-            case "Chờ duyệt":
-                return "badge badge-dark"; // Bạn có thể CSS thêm class này
-            default:
-                return "badge";
+            case "Đang diễn ra": return "badge badge-success";
+            case "Sắp tới": return "badge badge-info";
+            case "Đã xong": return "badge badge-warning";
+            case "Tạm hoãn": return "badge badge-secondary";
+            case "Hủy": return "badge badge-danger";
+            case "Chờ duyệt": return "badge badge-dark";
+            default: return "badge";
         }
     };
 
-    // Hàm phụ: Format ngày giờ từ MongoDB (ISO String) sang HH:MM DD/MM/YYYY
     const formatTime = (dateString) => {
         if (!dateString) return "--:--";
         const date = new Date(dateString);
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ' + date.toLocaleDateString('vi-VN');
     };
+
+    // Kiểm tra xem sự kiện đã diễn ra/hoàn thành chưa để chọn icon
+    const isEventActiveOrDone = ["Đang diễn ra", "Đã xong"].includes(event.status);
 
     return (
         <div className="event-card">
@@ -55,7 +48,6 @@ function EventCard({ event, onEdit, onDelete }) {
                 <div className="event-item">
                     <FaClock />
                     <span>
-                        {/* Đổi thành startTime và endTime */}
                         {formatTime(event.startTime)} - {formatTime(event.endTime)}
                     </span>
                 </div>
@@ -65,13 +57,11 @@ function EventCard({ event, onEdit, onDelete }) {
                 </div>
                 <div className="event-item">
                     <FaTag />
-                    {/* Đổi category thành type */}
                     <span>{event.type || "Chung"}</span>
                 </div>
                 <div className="event-item">
                     <FaUsers />
                     <span>
-                        {/* Đổi members thành assignees, và lấy name vì đã được populate */}
                         {event.assignees && event.assignees.length > 0
                             ? event.assignees.map(user => user.name).join(", ")
                             : "Cả nhóm"}
@@ -85,24 +75,24 @@ function EventCard({ event, onEdit, onDelete }) {
                 </div>
                 <div className="event-item">
                     <FaUserTie />
-                    {/* Lấy name của payer vì đã được populate */}
                     <span>{event.payer?.name || "Chưa có"}</span>
                 </div>
             </div>
             <div className="event-footer">
                 <div className="left-actions">
-                    <button className="icon-button success">
-                        <FaCheckCircle />
-                    </button>
+                    {/* LOGIC ĐỔI ICON Ở ĐÂY */}
+                    {isEventActiveOrDone ? (
+                        <button className="icon-button success">
+                            <FaCheckCircle />
+                        </button>
+                    ) : (
+                        <button className="icon-button" style={{ color: "#6c757d", backgroundColor: "#e9ecef" }}>
+                            <FaTimes />
+                        </button>
+                    )}
                 </div>
                 <div className="right-actions">
-                    <button className="icon-button">
-                        <FaArrowUp />
-                    </button>
-                    <button className="icon-button">
-                        <FaArrowDown />
-                    </button>
-                    {/* Nút sửa đã gọi hàm đúng */}
+                    {/* ĐÃ XÓA 2 NÚT MŨI TÊN LÊN/XUỐNG Ở ĐÂY */}
                     <button className="icon-button edit" onClick={() => onEdit(event)}>
                         <FaEdit />
                     </button>

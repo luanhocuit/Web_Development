@@ -14,12 +14,24 @@ function Dashboard() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
+    // HÀM PHỤ TRỢ: Format lấy giờ (VD: 09:53)
+    const formatTimeOnly = (dateString) => {
+        if (!dateString) return "--:--";
+        return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
+    // HÀM PHỤ TRỢ: Format lấy ngày (VD: 31/07/2026)
+    const formatDateOnly = (dateString) => {
+        if (!dateString) return "--/--/----";
+        return new Date(dateString).toLocaleDateString('vi-VN');
+    };
+
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
                 const token = localStorage.getItem("token");
                 const headers = { "Authorization": `Bearer ${token}` };
-                const apiUrl = import.meta.env.VITE_API_URL;
+                const apiUrl = import.meta.env.VITE_API_URL || "https://final-assignment-x6nf.onrender.com";
 
                 const [statsRes, eventsRes] = await Promise.all([
                     fetch(`${apiUrl}/api/stats/dashboard`, { headers }),
@@ -52,12 +64,12 @@ function Dashboard() {
             <div className="dashboard-cards">
                 <div className="dashboard-card">
                     <FaCalendarCheck />
-                    <h2>{stats.totalEvents}</h2>
+                    <h2>{stats.totalEvents || 0}</h2>
                     <p>Tổng sự kiện</p>
                 </div>
                 <div className="dashboard-card">
                     <FaUsers />
-                    <h2>{stats.totalMembers}</h2>
+                    <h2>{stats.totalMembers || 0}</h2>
                     <p>Thành viên</p>
                 </div>
                 <div className="dashboard-card">
@@ -67,7 +79,7 @@ function Dashboard() {
                 </div>
                 <div className="dashboard-card">
                     <FaPlayCircle />
-                    <h2>{stats.ongoingEvents}</h2>
+                    <h2>{stats.ongoingEvents || 0}</h2>
                     <p>Đang diễn ra</p>
                 </div>
             </div>
@@ -80,10 +92,11 @@ function Dashboard() {
                     {events.length > 0 ? (
                         events.map((event) => (
                             <div className="timeline-item" key={event._id || event.id}>
-                                <div className="timeline-time">{event.time || "00:00"}</div>
+                                {/* SỬA LẠI ĐỂ LẤY GIỜ CHUẨN TỪ startTime */}
+                                <div className="timeline-time">{formatTimeOnly(event.startTime)}</div>
                                 <div className="timeline-content">
                                     <h3>{event.title}</h3>
-                                    <p>📍 {event.place || event.location}</p>
+                                    <p>📍 {event.location || event.place || "Chưa xác định"}</p>
                                     <span>{event.status}</span>
                                 </div>
                             </div>
@@ -97,8 +110,12 @@ function Dashboard() {
                     <div className="summary-card">
                         <h3>Sự kiện tiếp theo</h3>
                         <h2>{events[0]?.title || "Chưa có sự kiện"}</h2>
-                        <p>{events[0]?.time || "--:--"} - {events[0]?.endTime || "--:--"}</p>
-                        {/* Gắn sự kiện chuyển hướng sang trang Quản lý Sự kiện khi bấm nút */}
+                        
+                        {/* SỬA LẠI ĐỂ RENDER CHUỖI THỜI GIAN ĐẸP */}
+                        <p>
+                            {events[0] ? `${formatTimeOnly(events[0].startTime)} - ${formatTimeOnly(events[0].endTime)} (${formatDateOnly(events[0].startTime)})` : "--:-- - --:--"}
+                        </p>
+                        
                         <button onClick={() => navigate("/su-kien")}>
                             Xem chi tiết <FaArrowRight />
                         </button>

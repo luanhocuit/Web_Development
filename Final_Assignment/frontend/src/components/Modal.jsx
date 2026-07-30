@@ -248,6 +248,14 @@ function Modal({
                                         <option value="Hủy">Hủy</option>
                                     </select>
                                 </div>
+                                <div>
+                                    <label>Chi phí dự kiến (VNĐ)</label>
+                                    <input type="number" name="cost" placeholder="VD: 500000" value={form.cost} onChange={handleChange} />
+                                </div>
+                                <div>
+                                    <label>Người phụ trách/Chi trả</label>
+                                    <input type="text" name="payer" placeholder="Nhập tên người phụ trách" value={form.payer} onChange={handleChange} />
+                                </div>
                             </div>
                             <div className="full-width">
                                 <label>Mô tả</label>
