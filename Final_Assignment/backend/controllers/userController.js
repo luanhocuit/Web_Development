@@ -88,3 +88,22 @@ exports.getUserById = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi lấy thông tin thành viên', error });
     }
 };
+
+// Hàm xóa user
+exports.deleteUser = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        
+        // Nhớ import User model ở đầu file nhé (ví dụ: const User = require('../models/User');)
+        const deletedUser = await User.findByIdAndDelete(userId);
+        
+        if (!deletedUser) {
+            return res.status(404).json({ message: "Không tìm thấy thành viên để xóa" });
+        }
+        
+        res.status(200).json({ message: "Xóa thành viên thành công!" });
+    } catch (error) {
+        console.error("Lỗi khi xóa user:", error);
+        res.status(500).json({ message: "Lỗi server khi xóa thành viên" });
+    }
+};
