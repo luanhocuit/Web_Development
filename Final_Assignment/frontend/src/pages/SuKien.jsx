@@ -13,7 +13,7 @@ function SuKien() {
 
     // State điều khiển Modal và Dữ liệu đang Edit
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingEvent, setEditingEvent] = useState(null); // THÊM MỚI: Lưu dữ liệu sự kiện cần sửa
+    const [editingEvent, setEditingEvent] = useState(null); 
 
     const fetchEvents = async () => {
         try {
@@ -44,13 +44,11 @@ function SuKien() {
         fetchEvents();
     }, []);
 
-    // THÊM MỚI: Hàm xử lý khi bấm nút Sửa trên EventCard
     const handleEdit = (eventData) => {
-        setEditingEvent(eventData); // Lưu dữ liệu cũ vào state
-        setIsModalOpen(true);       // Mở modal lên
+        setEditingEvent(eventData); 
+        setIsModalOpen(true);       
     };
 
-    // THÊM MỚI: Hàm xử lý khi bấm nút Xóa trên EventCard
     const handleDelete = async (id) => {
         if (!window.confirm("Bạn có chắc chắn muốn xóa sự kiện này?")) return;
         
@@ -64,7 +62,7 @@ function SuKien() {
             });
 
             if (response.ok) {
-                fetchEvents(); // Tải lại danh sách sau khi xóa thành công
+                fetchEvents(); 
             } else {
                 alert("Xóa thất bại, vui lòng thử lại!");
             }
@@ -73,7 +71,6 @@ function SuKien() {
         }
     };
 
-    // THÊM MỚI: Hàm xử lý khi đóng Modal (phải reset lại editingEvent)
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setEditingEvent(null);
@@ -94,7 +91,7 @@ function SuKien() {
                     <p className="page-subtitle">Tạo và quản lý toàn bộ lịch trình chuyến đi.</p>
                 </div>
                 <button className="btn" onClick={() => {
-                    setEditingEvent(null); // Đảm bảo bấm "Thêm mới" thì form trống
+                    setEditingEvent(null); 
                     setIsModalOpen(true);
                 }}>
                     <FaPlus /> Thêm sự kiện
@@ -117,7 +114,6 @@ function SuKien() {
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                     >
-                        {/* ĐÃ SỬA: Đổi tên các option khớp với Enum Backend */}
                         <option>Tất cả</option>
                         <option>Chờ duyệt</option>
                         <option>Sắp tới</option>
@@ -134,15 +130,18 @@ function SuKien() {
             ) : (
                 <div className="event-list">
                     {result.length > 0 ? (
-                        result.map((event) => (
-                            <EventCard
-                                key={event._id || event.id} 
-                                event={event}
-                                /* ĐÃ THÊM: Truyền hàm xuống cho EventCard */
-                                onEdit={handleEdit}
-                                onDelete={handleDelete}
-                            />
-                        ))
+                        // ĐÃ CHÈN LOGIC TỰ ĐỘNG SẮP XẾP VÀO ĐÂY
+                        result
+                            .slice()
+                            .sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
+                            .map((event) => (
+                                <EventCard
+                                    key={event._id || event.id} 
+                                    event={event}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDelete}
+                                />
+                            ))
                     ) : (
                         <p>Không tìm thấy sự kiện nào.</p>
                     )}
@@ -152,7 +151,7 @@ function SuKien() {
             {isModalOpen && (
                 <Modal 
                     isOpen={isModalOpen} 
-                    editingEvent={editingEvent} /* ĐÃ THÊM: Bơm dữ liệu cũ vào Modal */
+                    editingEvent={editingEvent} 
                     onClose={handleCloseModal} 
                     onSave={() => {
                         fetchEvents(); 
