@@ -196,3 +196,33 @@
         top:145px;
     }
 }
+
+/* ===========================================
+    DARK MODE CHO TRANG HỒ SƠ (PROFILE)
+=========================================== */
+
+body.dark-theme .profile-card,
+body.dark-theme .profile-info,
+body.dark-theme .stat-box {
+    background-color: var(--card-bg, #1e293b) !important;
+    color: var(--text-main, #f8fafc) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+/* Đổi màu các ô thông tin chi tiết (từng item trong info-grid) sang tối */
+body.dark-theme .info-grid div {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+/* Đồng bộ màu các tiêu đề, tên, số liệu thống kê */
+body.dark-theme .profile-card h2,
+body.dark-theme .profile-info h2,
+body.dark-theme .stat-box h3 {
+    color: var(--text-h, #f8fafc) !important;
+}
+
+/* Đồng bộ màu các đoạn mô tả, text phụ */
+body.dark-theme .stat-box p {
+    color: #94a3b8 !important;
+}

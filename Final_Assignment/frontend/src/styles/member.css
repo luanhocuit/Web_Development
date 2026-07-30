@@ -257,3 +257,46 @@
     }
 
 }
+
+/* ===========================================
+    DARK MODE CHO TRANG QUẢN LÝ THÀNH VIÊN
+=========================================== */
+
+body.dark-theme .member-search {
+    background-color: var(--card-bg, #1e293b) !important;
+    color: var(--text-main, #f8fafc) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .member-search input {
+    background: transparent !important;
+    color: var(--text-main, #f8fafc) !important;
+}
+
+body.dark-theme .member-search input::placeholder {
+    color: #94a3b8 !important;
+}
+
+body.dark-theme .member-card {
+    background-color: var(--card-bg, #1e293b) !important;
+    color: var(--text-main, #f8fafc) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .member-card h2 {
+    color: var(--text-h, #f8fafc) !important;
+}
+
+/* Đổi màu phần hộp thông tin bên trong thẻ card thành tối sâu hơn */
+body.dark-theme .member-info {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.dark-theme .member-info strong {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .member-info p {
+    color: #94a3b8 !important;
+}

@@ -331,3 +331,44 @@
     }
 
 }
+
+/* ===========================================
+    DARK MODE CHO TRANG QUẢN LÝ CHI TIÊU
+=========================================== */
+
+body.dark-theme .summary-box,
+body.dark-theme .expense-card {
+    background-color: var(--card-bg, #1e293b) !important;
+    color: var(--text-main, #f8fafc) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .summary-box h2,
+body.dark-theme .expense-top h2 {
+    color: var(--text-h, #f8fafc) !important;
+}
+
+body.dark-theme .summary-box h3,
+body.dark-theme .summary-box p,
+body.dark-theme .expense-top p {
+    color: #94a3b8 !important;
+}
+
+/* Đổi màu các ô thông tin chi tiết bên trong khoản chi sang tối sâu */
+body.dark-theme .expense-item {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.dark-theme .expense-item span {
+    color: #94a3b8 !important;
+}
+
+body.dark-theme .expense-item strong {
+    color: #f8fafc !important;
+}
+
+/* Đường viền ngăn cách phần chân khoản chi */
+body.dark-theme .expense-footer {
+    border-top-color: #334155 !important;
+}

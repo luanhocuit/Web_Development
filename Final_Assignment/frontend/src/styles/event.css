@@ -429,3 +429,57 @@
     }
 
 }
+
+/* ===========================================
+    DARK MODE CHO TRANG QUẢN LÝ SỰ KIỆN
+=========================================== */
+
+body.dark-theme .filter-box,
+body.dark-theme .event-card {
+    background-color: var(--card-bg, #1e293b) !important;
+    color: var(--text-main, #f8fafc) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+/* Xử lý ô input tìm kiếm và khung chọn trạng thái (select) */
+body.dark-theme .search-input,
+body.dark-theme .status-filter {
+    background-color: #0f172a !important;
+    border-color: var(--border, #334155) !important;
+}
+
+body.dark-theme .search-input input,
+body.dark-theme .status-filter select {
+    background: transparent !important;
+    color: var(--text-main, #f8fafc) !important;
+}
+
+body.dark-theme .search-input input::placeholder {
+    color: #94a3b8 !important;
+}
+
+body.dark-theme .status-filter select option {
+    background-color: #1e293b;
+    color: #f8fafc;
+}
+
+/* Đổi màu tiêu đề và chữ trong event card */
+body.dark-theme .event-header h2 {
+    color: var(--text-h, #f8fafc) !important;
+}
+
+body.dark-theme .event-header p,
+body.dark-theme .event-item {
+    color: #94a3b8 !important;
+}
+
+/* Đường viền phần chân event footer */
+body.dark-theme .event-footer {
+    border-top-color: #334155 !important;
+}
+
+/* Nền các nút icon mặc định khi ở chế độ tối */
+body.dark-theme .icon-button {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
