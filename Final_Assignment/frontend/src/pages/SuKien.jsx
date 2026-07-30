@@ -1,38 +1,34 @@
 import { useState, useEffect } from "react";
 import { FaPlus, FaSearch, FaFilter } from "react-icons/fa";
 import EventCard from "../components/EventCard";
-import Modal from "../components/Modal"; // Import Modal vào đây
+import Modal from "../components/Modal"; 
 import "../styles/event.css";
 
 function SuKien() {
     const [search, setSearch] = useState("");
     const [status, setStatus] = useState("Tất cả");
     
-    // State lưu trữ dữ liệu thật từ API
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // State điều khiển đóng/mở Modal
+    // State điều khiển Modal và Dữ liệu đang Edit
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editingEvent, setEditingEvent] = useState(null); // THÊM MỚI: Lưu dữ liệu sự kiện cần sửa
 
-    // Hàm gọi API lấy danh sách sự kiện
     const fetchEvents = async () => {
         try {
             const token = localStorage.getItem("token");
-            
-            // Thay đổi URL này nếu Backend của bạn chạy ở port khác
             const response = await fetch("https://final-assignment-x6nf.onrender.com/api/events", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` // Gắn token để qua ải middleware
+                    "Authorization": `Bearer ${token}`
                 }
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                // Giả sử API trả về data là mảng sự kiện hoặc { events: [...] }
                 setEvents(data.events || data);
             } else {
                 console.error("Lỗi lấy sự kiện:", data.message);
@@ -44,14 +40,46 @@ function SuKien() {
         }
     };
 
-    // Chạy fetchEvents 1 lần duy nhất khi render component
     useEffect(() => {
         fetchEvents();
     }, []);
 
-    // Logic filter
+    // THÊM MỚI: Hàm xử lý khi bấm nút Sửa trên EventCard
+    const handleEdit = (eventData) => {
+        setEditingEvent(eventData); // Lưu dữ liệu cũ vào state
+        setIsModalOpen(true);       // Mở modal lên
+    };
+
+    // THÊM MỚI: Hàm xử lý khi bấm nút Xóa trên EventCard
+    const handleDelete = async (id) => {
+        if (!window.confirm("Bạn có chắc chắn muốn xóa sự kiện này?")) return;
+        
+        try {
+            const token = localStorage.getItem("token");
+            const response = await fetch(`https://final-assignment-x6nf.onrender.com/api/events/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                fetchEvents(); // Tải lại danh sách sau khi xóa thành công
+            } else {
+                alert("Xóa thất bại, vui lòng thử lại!");
+            }
+        } catch (error) {
+            console.error("Lỗi kết nối khi xóa:", error);
+        }
+    };
+
+    // THÊM MỚI: Hàm xử lý khi đóng Modal (phải reset lại editingEvent)
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setEditingEvent(null);
+    };
+
     const result = events.filter((event) => {
-        // Dùng fallback chuỗi rỗng để tránh lỗi toLowerCase of undefined
         const title = event.title || ""; 
         const matchSearch = title.toLowerCase().includes(search.toLowerCase());
         const matchStatus = status === "Tất cả" || event.status === status;
@@ -65,8 +93,10 @@ function SuKien() {
                     <h1 className="page-title">Quản lý sự kiện</h1>
                     <p className="page-subtitle">Tạo và quản lý toàn bộ lịch trình chuyến đi.</p>
                 </div>
-                {/* Thêm onClick để mở Modal */}
-                <button className="btn" onClick={() => setIsModalOpen(true)}>
+                <button className="btn" onClick={() => {
+                    setEditingEvent(null); // Đảm bảo bấm "Thêm mới" thì form trống
+                    setIsModalOpen(true);
+                }}>
                     <FaPlus /> Thêm sự kiện
                 </button>
             </div>
@@ -87,10 +117,12 @@ function SuKien() {
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                     >
+                        {/* ĐÃ SỬA: Đổi tên các option khớp với Enum Backend */}
                         <option>Tất cả</option>
-                        <option>Sắp diễn ra</option>
+                        <option>Chờ duyệt</option>
+                        <option>Sắp tới</option>
                         <option>Đang diễn ra</option>
-                        <option>Đã hoàn thành</option>
+                        <option>Đã xong</option>
                         <option>Tạm hoãn</option>
                         <option>Hủy</option>
                     </select>
@@ -104,9 +136,11 @@ function SuKien() {
                     {result.length > 0 ? (
                         result.map((event) => (
                             <EventCard
-                                /* MongoDB thường dùng _id thay vì id */
                                 key={event._id || event.id} 
                                 event={event}
+                                /* ĐÃ THÊM: Truyền hàm xuống cho EventCard */
+                                onEdit={handleEdit}
+                                onDelete={handleDelete}
                             />
                         ))
                     ) : (
@@ -115,14 +149,14 @@ function SuKien() {
                 </div>
             )}
 
-            {/* Khối gọi Modal đặt ở cuối cùng trước khi đóng thẻ div */}
             {isModalOpen && (
                 <Modal 
                     isOpen={isModalOpen} 
-                    onClose={() => setIsModalOpen(false)} 
+                    editingEvent={editingEvent} /* ĐÃ THÊM: Bơm dữ liệu cũ vào Modal */
+                    onClose={handleCloseModal} 
                     onSave={() => {
-                        fetchEvents(); // Tải lại danh sách sự kiện từ server
-                        setIsModalOpen(false); // Đóng modal sau khi lưu xong
+                        fetchEvents(); 
+                        handleCloseModal(); 
                     }} 
                 />
             )}
