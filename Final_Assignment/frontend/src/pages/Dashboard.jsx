@@ -62,7 +62,7 @@ function Dashboard() {
                 </div>
                 <div className="dashboard-card">
                     <FaMoneyBillWave />
-                    <h2>{stats.totalCost.toLocaleString()}đ</h2>
+                    <h2>{(stats?.totalCost || 0).toLocaleString('vi-VN')}đ</h2>
                     <p>Tổng chi phí</p>
                 </div>
                 <div className="dashboard-card">
