@@ -229,3 +229,52 @@
     }
 
 }
+
+/* ===========================================
+    DARK MODE CHO TRANG THỐNG KÊ (STATISTICS)
+=========================================== */
+
+body.dark-theme .stats-card,
+body.dark-theme .chart-card {
+    background-color: var(--card-bg, #1e293b) !important;
+    color: var(--text-main, #f8fafc) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-theme .stats-card h2,
+body.dark-theme .chart-card h2 {
+    color: var(--text-h, #f8fafc) !important;
+}
+
+body.dark-theme .stats-card h3 {
+    color: #94a3b8 !important;
+}
+
+/* Khung sự kiện trực tiếp (Live Event) */
+body.dark-theme .live-event {
+    background-color: #1e293b !important;
+    border-left-color: #2563eb !important;
+}
+
+body.dark-theme .live-event h3 {
+    color: #f8fafc !important;
+}
+
+body.dark-theme .live-event p {
+    color: #94a3b8 !important;
+}
+
+/* Bảng thống kê dữ liệu dự phòng */
+body.dark-theme .statistics-table th {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+body.dark-theme .statistics-table td {
+    border-bottom-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+body.dark-theme .statistics-table tr:hover {
+    background-color: #334155 !important;
+}
