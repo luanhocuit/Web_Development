@@ -42,7 +42,7 @@ function Navbar() {
     return (
         <header className="navbar">
             <div className="navbar-left">
-                <h2>Chuyến đi Đà Nẵng 2026</h2>
+                <h2>Trip Planner Dashboard</h2>
                 <span>{today}</span>
             </div>
             <div className="navbar-right">

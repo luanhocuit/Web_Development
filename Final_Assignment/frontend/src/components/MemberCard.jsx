@@ -16,24 +16,23 @@ function MemberCard({ member, onEdit, onDelete }) {
             <h2>{member.name}</h2>
             <span
                 className={
-                    // Sửa điều kiện so sánh thành "Lead"
                     member.role === "Lead"
                         ? "role lead"
                         : "role member"
                 }
             >
                 <FaUserTie />
-                {/* Dịch role ra tiếng Việt để hiển thị */}
                 {member.role === "Lead" ? "Trưởng nhóm" : "Thành viên"}
             </span>
             <div className="member-info">
                 <p>
-                    <strong>Nhiệm vụ</strong>
+                    {/* ĐÃ ĐỔI TÊN Ở ĐÂY */}
+                    <strong>Tham gia hoạt động</strong>
                 </p>
-                <p>{member.job || "Chưa phân công"}</p>
+                {/* Có thể bạn cần map danh sách các sự kiện mà member này tham gia ở đây, tạm thời để cứng */}
+                <p>{member.events ? member.events.length + " hoạt động" : "Chưa có hoạt động"}</p>
             </div>
             <div className="member-footer">
-                {/* Nút sửa đã gọi hàm đúng */}
                 <button className="edit-btn" onClick={() => onEdit(member)}>
                     <FaPen /> Sửa
                 </button>

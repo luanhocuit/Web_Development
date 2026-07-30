@@ -29,17 +29,14 @@ function Modal({
         name: "",
         email: "",
         password: "",
-        role: "Thành viên",
+        role: "Member", // Sửa lại thành Member cho chuẩn Backend
         amount: "",
         expenseTitle: ""
     });
 
     const [isLoading, setIsLoading] = useState(false);
-    
-    // ĐÃ THÊM: State để lưu danh sách thành viên lấy từ API
     const [users, setUsers] = useState([]);
 
-    // ĐÃ THÊM: Gọi API lấy danh sách user khi mở modal (chỉ gọi khi thêm/sửa sự kiện hoặc khoản chi)
     useEffect(() => {
         if (isOpen && (type === "event" || type === "expense")) {
             const fetchUsers = async () => {
@@ -52,7 +49,6 @@ function Modal({
                     
                     if (response.ok) {
                         const data = await response.json();
-                        // Tùy cấu trúc API trả về, có thể là data.users hoặc chính mảng data
                         setUsers(data.users || data || []); 
                     }
                 } catch (error) {
@@ -63,10 +59,12 @@ function Modal({
         }
     }, [isOpen, type]);
 
+    // ĐÃ SỬA: Nạp dữ liệu cũ cho cả Event VÀ Member
     useEffect(() => {
         if (editingEvent) {
             setForm({
                 ...form,
+                // Dữ liệu cho Event
                 title: editingEvent.title || "",
                 description: editingEvent.description || "",
                 start: formatDateTimeLocal(editingEvent.startTime),
@@ -75,8 +73,12 @@ function Modal({
                 category: editingEvent.type || "Ăn uống",
                 status: editingEvent.status || "Sắp tới",
                 cost: editingEvent.cost || "",
-                // Lấy ID của payer để hiển thị đúng lựa chọn trên thẻ <select>
-                payer: editingEvent.payer?._id || editingEvent.payer || ""
+                payer: editingEvent.payer?._id || editingEvent.payer || "",
+                
+                // Dữ liệu cho Member
+                name: editingEvent.name || "",
+                email: editingEvent.email || "",
+                role: editingEvent.role || "Member"
             });
         }
     }, [editingEvent]);
@@ -102,14 +104,24 @@ function Modal({
             let method = "POST";
             let bodyData = {};
 
+            // ĐÃ SỬA: Thêm logic cập nhật (PUT) cho Member
             if (type === "member") {
-                url = `${apiUrl}/api/users`;
+                url = editingEvent ? `${apiUrl}/api/users/${editingEvent._id}` : `${apiUrl}/api/users`;
+                method = editingEvent ? "PUT" : "POST";
+                
                 bodyData = {
                     name: form.name,
                     email: form.email,
-                    password: form.password || "123456",
                     role: form.role
                 };
+
+                // Xử lý riêng password: Có nhập thì cập nhật, tạo mới không nhập thì lấy mặc định
+                if (form.password && form.password.trim() !== "") {
+                    bodyData.password = form.password;
+                } else if (!editingEvent) {
+                    bodyData.password = "123456";
+                }
+
             } else if (type === "expense") {
                 url = `${apiUrl}/api/expenses`;
                 bodyData = {
@@ -134,7 +146,6 @@ function Modal({
                 if (form.cost) {
                     bodyData.cost = Number(form.cost);
                 }
-
                 if (form.payer && form.payer.trim() !== "") {
                     bodyData.payer = form.payer;
                 }
@@ -169,7 +180,7 @@ function Modal({
             <div className="event-modal">
                 <div className="modal-header">
                     <h2>
-                        {type === "member" && "Thêm thành viên mới"}
+                        {type === "member" && (editingEvent ? "Chỉnh sửa thành viên" : "Thêm thành viên mới")}
                         {type === "expense" && "Thêm khoản chi tiêu"}
                         {type === "event" && (editingEvent ? "Chỉnh sửa sự kiện" : "Thêm sự kiện")}
                     </h2>
@@ -179,7 +190,7 @@ function Modal({
                 </div>
                 <form onSubmit={handleSubmit}>
                     
-                    {/* FORM THÊM THÀNH VIÊN */}
+                    {/* FORM THÊM/SỬA THÀNH VIÊN */}
                     {type === "member" && (
                         <div className="form-grid">
                             <div>
@@ -191,13 +202,14 @@ function Modal({
                                 <input type="email" name="email" placeholder="email@example.com" value={form.email} onChange={handleChange} required />
                             </div>
                             <div>
-                                <label>Mật khẩu khởi tạo</label>
-                                <input type="password" name="password" placeholder="Mặc định: 123456" value={form.password} onChange={handleChange} />
+                                <label>{editingEvent ? "Đổi mật khẩu (để trống nếu giữ nguyên)" : "Mật khẩu khởi tạo"}</label>
+                                <input type="password" name="password" placeholder={editingEvent ? "*******" : "Mặc định: 123456"} value={form.password} onChange={handleChange} />
                             </div>
                             <div>
                                 <label>Vai trò</label>
                                 <select name="role" value={form.role} onChange={handleChange}>
-                                    <option value="Thành viên">Thành viên</option>
+                                    {/* Đổi value thành tiếng Anh để tránh lỗi Schema enum */}
+                                    <option value="Member">Thành viên</option>
                                     <option value="Lead">Trưởng nhóm</option>
                                 </select>
                             </div>
@@ -217,7 +229,6 @@ function Modal({
                             </div>
                             <div>
                                 <label>Người chi trả</label>
-                                {/* ĐÃ SỬA THÀNH THẺ SELECT */}
                                 <select name="payer" value={form.payer} onChange={handleChange}>
                                     <option value="">-- Chọn người chi trả --</option>
                                     {users.map((user) => (
@@ -277,7 +288,6 @@ function Modal({
                                 </div>
                                 <div>
                                     <label>Người phụ trách/Chi trả</label>
-                                    {/* ĐÃ SỬA THÀNH THẺ SELECT */}
                                     <select name="payer" value={form.payer} onChange={handleChange}>
                                         <option value="">-- Chọn người phụ trách --</option>
                                         {users.map((user) => (

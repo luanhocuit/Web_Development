@@ -1,24 +1,26 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+
 // Lấy danh sách toàn bộ thành viên (loại bỏ password để bảo mật)
 exports.getAllUsers = async (req, res) => {
     try {
         const users = await User.find().select('-password');
         res.status(200).json(users);
     } catch (error) {
+        console.error("Lỗi get users:", error);
         res.status(500).json({ message: 'Lỗi khi truy xuất danh sách thành viên', error });
     }
 };
 
-// Cập nhật vai trò hoặc nhiệm vụ cho thành viên (Role & Task)
+// ĐÃ SỬA: Biến hàm này thành hàm cập nhật toàn bộ thông tin User
 exports.updateUserTask = async (req, res) => {
     try {
-        const { role, taskDescription } = req.body;
+        const { name, email, role, taskDescription } = req.body;
         
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            { role, taskDescription },
-            { new: true } // Trả về data mới sau khi update
+            { name, email, role, taskDescription },
+            { returnDocument: 'after', runValidators: true } // Sửa warning Mongoose của bạn luôn
         ).select('-password');
 
         if (!updatedUser) {
@@ -27,11 +29,15 @@ exports.updateUserTask = async (req, res) => {
         
         res.status(200).json(updatedUser);
     } catch (error) {
+        console.error("Lỗi update user:", error); // Bắt lỗi in ra terminal
+        if (error.code === 11000) {
+            return res.status(400).json({ message: 'Email này đã có người sử dụng. Vui lòng chọn email khác!' });
+        }
         res.status(500).json({ message: 'Lỗi hệ thống khi cập nhật thành viên', error });
     }
 };
 
-// --- PHẦN MỚI THÊM: Tạo thành viên mới & Bắt lỗi trùng Email ---
+// Tạo thành viên mới & Bắt lỗi trùng Email
 exports.createUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
@@ -45,8 +51,8 @@ exports.createUser = async (req, res) => {
         const newUser = new User({
             name,
             email,
-            password: hashedPassword, // Lưu mật khẩu đã băm
-            role // Đã xóa default 'Thành viên' ở đây vì sẽ bị lỗi Enum (xem phần 3)
+            password: hashedPassword,
+            role 
         });
 
         const savedUser = await newUser.save();
@@ -60,14 +66,16 @@ exports.createUser = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Lỗi create user:", error); // Bắt lỗi in ra terminal
         if (error.code === 11000) {
             return res.status(400).json({ 
                 message: "Email này đã có người sử dụng. Vui lòng nhập email khác!" 
             });
         }
-        res.status(500).json({ message: 'Lỗi hệ thống khi tạo thành viên', error });
+        res.status(500).json({ message: 'Lỗi hệ thống khi tạo thành viên', error: error.message });
     }
 };
+
 exports.getUserById = async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select('-password');
@@ -76,6 +84,7 @@ exports.getUserById = async (req, res) => {
         }
         res.status(200).json(user);
     } catch (error) {
+        console.error("Lỗi get user id:", error);
         res.status(500).json({ message: 'Lỗi khi lấy thông tin thành viên', error });
     }
 };
