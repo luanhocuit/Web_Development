@@ -8,14 +8,16 @@ function ChiTieu() {
     const [expenses, setExpenses] = useState([]);
     const [summary, setSummary] = useState({ total: 0, topSpender: "Đang cập nhật", topAmount: 0 });
     const [loading, setLoading] = useState(true);
+    
+    // Đã thêm state quản lý việc SỬA khoản chi
     const [isModalOpen, setIsModalOpen] = useState(false); 
+    const [editingExpense, setEditingExpense] = useState(null);
 
     const fetchExpenses = async () => {
         try {
             const token = localStorage.getItem("token");
             const apiUrl = import.meta.env.VITE_API_URL || "https://final-assignment-x6nf.onrender.com";
 
-            // 1. Lấy danh sách Chi tiêu
             const expenseRes = await fetch(`${apiUrl}/api/expenses`, {
                 method: "GET",
                 headers: {
@@ -26,7 +28,6 @@ function ChiTieu() {
             const expenseData = await expenseRes.json();
             const pureExpenses = expenseRes.ok ? (expenseData.expenses || expenseData) : [];
 
-            // 2. Lấy danh sách Sự kiện để lấy các sự kiện CÓ CHI PHÍ
             const eventRes = await fetch(`${apiUrl}/api/events`, {
                 method: "GET",
                 headers: {
@@ -37,7 +38,6 @@ function ChiTieu() {
             const eventData = await eventRes.json();
             const eventList = eventRes.ok ? (eventData.events || eventData) : [];
 
-            // Lọc các sự kiện có tiền và format lại để ExpenseCard đọc được
             const eventExpenses = eventList
                 .filter(event => event.cost && event.cost > 0)
                 .map(event => ({
@@ -46,18 +46,14 @@ function ChiTieu() {
                     amount: event.cost,
                     payer: event.payer || "Cả nhóm",
                     createdAt: event.startTime || event.createdAt,
-                    members: event.participants?.length || 1 // Số người tham gia event
+                    members: event.participants?.length || 1,
+                    isEvent: true 
                 }));
 
-            // 3. Gộp cả 2 danh sách lại
             const allExpenses = [...pureExpenses, ...eventExpenses];
-            
-            // Sắp xếp ưu tiên hiển thị mới nhất lên đầu
             allExpenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
             setExpenses(allExpenses);
             
-            // 4. Tính toán tổng chi phí và Người chi nhiều nhất
             const total = allExpenses.reduce((acc, curr) => acc + (curr.amount || 0), 0);
             
             const spenderTotals = {};
@@ -77,7 +73,6 @@ function ChiTieu() {
                     topSpender = name;
                 }
             }
-
             setSummary({ total, topSpender, topAmount });
 
         } catch (error) {
@@ -91,6 +86,48 @@ function ChiTieu() {
         fetchExpenses();
     }, []);
 
+    // --- CÁC HÀM XỬ LÝ MỚI ĐƯỢC THÊM VÀO ĐỂ SỬA/XÓA ---
+    const handleOpenAddModal = () => {
+        setEditingExpense(null);
+        setIsModalOpen(true);
+    };
+
+    const handleEdit = (expense) => {
+        if (expense.isEvent) {
+            alert("Khoản chi này từ Sự kiện. Vui lòng sang trang Quản lý sự kiện để sửa!");
+            return;
+        }
+        setEditingExpense(expense);
+        setIsModalOpen(true);
+    };
+
+    const handleDelete = async (expense) => {
+        if (expense.isEvent) {
+            alert("Khoản chi này từ Sự kiện. Vui lòng sang trang Quản lý sự kiện để xóa!");
+            return;
+        }
+        if (!window.confirm("Bạn có chắc chắn muốn xóa khoản chi này?")) return;
+
+        try {
+            const token = localStorage.getItem("token");
+            const apiUrl = import.meta.env.VITE_API_URL || "https://final-assignment-x6nf.onrender.com";
+            const expenseId = expense._id || expense.id;
+
+            const response = await fetch(`${apiUrl}/api/expenses/${expenseId}`, {
+                method: "DELETE",
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                fetchExpenses(); 
+            } else {
+                alert("Xóa thất bại!");
+            }
+        } catch (error) {
+            console.error("Lỗi khi xóa:", error);
+        }
+    };
+
     return (
         <div>
             <div className="page-header">
@@ -98,7 +135,7 @@ function ChiTieu() {
                     <h1 className="page-title">Quản lý chi tiêu</h1>
                     <p className="page-subtitle">Theo dõi toàn bộ chi phí chuyến đi.</p>
                 </div>
-                <button className="btn" onClick={() => setIsModalOpen(true)}>
+                <button className="btn" onClick={handleOpenAddModal}>
                     <FaPlus /> Thêm khoản chi
                 </button>
             </div>
@@ -129,7 +166,12 @@ function ChiTieu() {
                 <div className="expense-list">
                     {expenses.length > 0 ? (
                         expenses.map((expense) => (
-                            <ExpenseCard key={expense._id} expense={expense} />
+                            <ExpenseCard 
+                                key={expense._id} 
+                                expense={expense} 
+                                onEdit={() => handleEdit(expense)} // Đã truyền hàm Sửa
+                                onDelete={() => handleDelete(expense)} // Đã truyền hàm Xóa
+                            />
                         ))
                     ) : (
                         <p>Chưa có khoản chi tiêu nào được ghi nhận.</p>
@@ -139,6 +181,7 @@ function ChiTieu() {
 
             <Modal
                 isOpen={isModalOpen}
+                editingEvent={editingExpense} // Truyền dữ liệu sang Modal
                 onClose={() => setIsModalOpen(false)}
                 onSave={fetchExpenses}
                 type="expense"

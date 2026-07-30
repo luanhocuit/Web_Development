@@ -34,7 +34,6 @@ function ExpenseCard({ expense, onEdit, onDelete }) {
                     <FaUser />
                     <span>
                         Người thanh toán:
-                        {/* ĐÃ FIX LỖI Ở ĐÂY */}
                         <strong> {payerName || "Chưa rõ"}</strong>
                     </span>
                 </div>
@@ -60,14 +59,18 @@ function ExpenseCard({ expense, onEdit, onDelete }) {
                     </span>
                 </div>
             </div>
-            <div className="expense-footer">
-                <button className="edit-btn" onClick={() => onEdit(expense)}>
-                    <FaEdit /> Sửa
-                </button>
-                <button className="delete-btn" onClick={() => onDelete(expense._id || expense.id)}>
-                    <FaTrash /> Xóa
-                </button>
-            </div>
+            
+            {/* CHỈ HIỂN THỊ NÚT SỬA/XÓA NẾU KHÔNG PHẢI LÀ KHOẢN CHI TỪ SỰ KIỆN */}
+            {!expense.isEvent && (
+                <div className="expense-footer">
+                    <button className="edit-btn" onClick={() => onEdit(expense)}>
+                        <FaEdit /> Sửa
+                    </button>
+                    <button className="delete-btn" onClick={() => onDelete(expense._id || expense.id)}>
+                        <FaTrash /> Xóa
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
