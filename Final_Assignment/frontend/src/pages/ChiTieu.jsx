@@ -6,10 +6,10 @@ import "../styles/expense.css";
 
 function ChiTieu() {
     const [expenses, setExpenses] = useState([]);
-    const [summary, setSummary] = useState({ total: 0, topSpender: "Đang cập nhật", topAmount: 0 });
+    // Đã thêm totalPerPerson vào state summary
+    const [summary, setSummary] = useState({ total: 0, topSpender: "Đang cập nhật", topAmount: 0, totalPerPerson: 0 });
     const [loading, setLoading] = useState(true);
     
-    // Đã thêm state quản lý việc SỬA khoản chi
     const [isModalOpen, setIsModalOpen] = useState(false); 
     const [editingExpense, setEditingExpense] = useState(null);
 
@@ -54,8 +54,16 @@ function ChiTieu() {
             allExpenses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             setExpenses(allExpenses);
             
+            // 1. Tính tổng chi phí
             const total = allExpenses.reduce((acc, curr) => acc + (curr.amount || 0), 0);
             
+            // 2. Tính trung bình số tiền Cần thanh toán (Mỗi người cần trả)
+            const totalPerPerson = allExpenses.reduce((acc, curr) => {
+                const membersCount = curr.members || 1; // Tránh chia cho 0
+                return acc + ((curr.amount || 0) / membersCount);
+            }, 0);
+            
+            // 3. Tìm người chi nhiều nhất
             const spenderTotals = {};
             allExpenses.forEach(exp => {
                 const payerName = typeof exp.payer === 'object' ? exp.payer?.name : (exp.payer || "Chưa rõ");
@@ -73,7 +81,9 @@ function ChiTieu() {
                     topSpender = name;
                 }
             }
-            setSummary({ total, topSpender, topAmount });
+            
+            // Cập nhật state đầy đủ
+            setSummary({ total, topSpender, topAmount, totalPerPerson });
 
         } catch (error) {
             console.error("Lỗi lấy danh sách chi tiêu:", error);
@@ -86,7 +96,6 @@ function ChiTieu() {
         fetchExpenses();
     }, []);
 
-    // --- CÁC HÀM XỬ LÝ MỚI ĐƯỢC THÊM VÀO ĐỂ SỬA/XÓA ---
     const handleOpenAddModal = () => {
         setEditingExpense(null);
         setIsModalOpen(true);
@@ -153,10 +162,12 @@ function ChiTieu() {
                     <h2>{summary.topSpender}</h2>
                     <p>{summary.topAmount > 0 ? `${summary.topAmount.toLocaleString()} VNĐ` : "-- VNĐ"}</p>
                 </div>
+                
+                {/* Đã cập nhật hiển thị Cần thanh toán tại đây */}
                 <div className="summary-box">
                     <h3>Cần thanh toán</h3>
-                    <h2>-- VNĐ</h2>
-                    <p>Đang chờ tính toán</p>
+                    <h2>{Math.round(summary.totalPerPerson).toLocaleString()} VNĐ</h2>
+                    <p>Trung bình mỗi người</p>
                 </div>
             </div>
 
@@ -169,8 +180,8 @@ function ChiTieu() {
                             <ExpenseCard 
                                 key={expense._id} 
                                 expense={expense} 
-                                onEdit={() => handleEdit(expense)} // Đã truyền hàm Sửa
-                                onDelete={() => handleDelete(expense)} // Đã truyền hàm Xóa
+                                onEdit={() => handleEdit(expense)} 
+                                onDelete={() => handleDelete(expense)} 
                             />
                         ))
                     ) : (
@@ -181,7 +192,7 @@ function ChiTieu() {
 
             <Modal
                 isOpen={isModalOpen}
-                editingEvent={editingExpense} // Truyền dữ liệu sang Modal
+                editingEvent={editingExpense} 
                 onClose={() => setIsModalOpen(false)}
                 onSave={fetchExpenses}
                 type="expense"
