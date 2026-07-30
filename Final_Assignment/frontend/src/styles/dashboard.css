@@ -199,3 +199,23 @@ body.dark-theme .timeline-item {
         grid-template-columns: 1fr;
     }
 }
+
+/* Đồng bộ màu nền toàn trang khi bật Dark Mode */
+body.dark-theme {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.dark-theme .content,
+body.dark-theme main {
+    background-color: #0f172a !important;
+}
+
+/* Đảm bảo tiêu đề hiển thị rõ ràng trên nền tối */
+body.dark-theme .page-title {
+    color: #f8fafc !important;
+}
+
+body.dark-theme .page-subtitle {
+    color: #94a3b8 !important;
+}
