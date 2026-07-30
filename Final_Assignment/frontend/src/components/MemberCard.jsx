@@ -16,13 +16,15 @@ function MemberCard({ member, onEdit, onDelete }) {
             <h2>{member.name}</h2>
             <span
                 className={
-                    member.role === "Trưởng nhóm"
+                    // Sửa điều kiện so sánh thành "Lead"
+                    member.role === "Lead"
                         ? "role lead"
                         : "role member"
                 }
             >
                 <FaUserTie />
-                {member.role || "Thành viên"}
+                {/* Dịch role ra tiếng Việt để hiển thị */}
+                {member.role === "Lead" ? "Trưởng nhóm" : "Thành viên"}
             </span>
             <div className="member-info">
                 <p>
@@ -31,10 +33,11 @@ function MemberCard({ member, onEdit, onDelete }) {
                 <p>{member.job || "Chưa phân công"}</p>
             </div>
             <div className="member-footer">
+                {/* Nút sửa đã gọi hàm đúng */}
                 <button className="edit-btn" onClick={() => onEdit(member)}>
                     <FaPen /> Sửa
                 </button>
-                <button className="delete-btn" onClick={() => onDelete(member._id || member.id)}>
+                <button className="delete-btn" onClick={() => onDelete(member._id)}>
                     <FaTrash /> Xóa
                 </button>
             </div>
