@@ -23,11 +23,10 @@ const eventSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Trigger hook: Bắt buộc Validate thời gian trước khi lưu vào DB
-eventSchema.pre('save', function (next) {
+eventSchema.pre('save', function () {
   if (this.startTime >= this.endTime) {
-    return next(new Error('Giờ kết thúc bắt buộc phải sau giờ bắt đầu.'));
+    throw new Error('Giờ kết thúc bắt buộc phải sau giờ bắt đầu.');
   }
-  next();
 });
 
 module.exports = mongoose.model('Event', eventSchema);
