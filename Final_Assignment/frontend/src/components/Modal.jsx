@@ -6,18 +6,15 @@ function Modal({
     onClose,
     onSave,
     type = "event", 
-    editingEvent = null // 1. ĐÃ SỬA: Đổi tên prop cho khớp với SuKien.jsx truyền xuống
+    editingEvent = null
 }) {
-    // Hàm phụ trợ: Format ngày giờ từ MongoDB ra chuẩn HTML5 datetime-local (YYYY-MM-DDThh:mm)
     const formatDateTimeLocal = (dateString) => {
         if (!dateString) return "";
         const date = new Date(dateString);
-        // Trừ đi offset để lấy đúng giờ Local, tránh bị lệch múi giờ (UTC)
         const tzOffset = date.getTimezoneOffset() * 60000;
         return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
     };
 
-    // Khởi tạo state với các giá trị rỗng mặc định
     const [form, setForm] = useState({
         title: "",
         description: "",
@@ -38,22 +35,47 @@ function Modal({
     });
 
     const [isLoading, setIsLoading] = useState(false);
+    
+    // ĐÃ THÊM: State để lưu danh sách thành viên lấy từ API
+    const [users, setUsers] = useState([]);
 
-    // 2. ĐÃ THÊM: Theo dõi biến editingEvent, nếu có dữ liệu thì nạp vào form
+    // ĐÃ THÊM: Gọi API lấy danh sách user khi mở modal (chỉ gọi khi thêm/sửa sự kiện hoặc khoản chi)
+    useEffect(() => {
+        if (isOpen && (type === "event" || type === "expense")) {
+            const fetchUsers = async () => {
+                try {
+                    const token = localStorage.getItem("token");
+                    const apiUrl = import.meta.env.VITE_API_URL || "https://final-assignment-x6nf.onrender.com";
+                    const response = await fetch(`${apiUrl}/api/users`, {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        // Tùy cấu trúc API trả về, có thể là data.users hoặc chính mảng data
+                        setUsers(data.users || data || []); 
+                    }
+                } catch (error) {
+                    console.error("Lỗi lấy danh sách thành viên:", error);
+                }
+            };
+            fetchUsers();
+        }
+    }, [isOpen, type]);
+
     useEffect(() => {
         if (editingEvent) {
             setForm({
                 ...form,
                 title: editingEvent.title || "",
                 description: editingEvent.description || "",
-                // Áp dụng hàm format thời gian
                 start: formatDateTimeLocal(editingEvent.startTime),
                 end: formatDateTimeLocal(editingEvent.endTime),
                 location: editingEvent.location || "",
                 category: editingEvent.type || "Ăn uống",
                 status: editingEvent.status || "Sắp tới",
                 cost: editingEvent.cost || "",
-                // Nếu payer đã được populate ở Backend, nó sẽ là object. Cần lấy _id
+                // Lấy ID của payer để hiển thị đúng lựa chọn trên thẻ <select>
                 payer: editingEvent.payer?._id || editingEvent.payer || ""
             });
         }
@@ -66,11 +88,6 @@ function Modal({
             ...form,
             [e.target.name]: e.target.value
         });
-    };
-
-    const handleMembersChange = (e) => {
-        const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
-        setForm({ ...form, members: selectedOptions });
     };
 
     const handleSubmit = async (e) => {
@@ -101,7 +118,6 @@ function Modal({
                     payer: form.payer
                 };
             } else {
-                // Sự kiện: Kiểm tra nếu có editingEvent thì là PUT, không thì POST
                 url = editingEvent ? `${apiUrl}/api/events/${editingEvent._id}` : `${apiUrl}/api/events`;
                 method = editingEvent ? "PUT" : "POST";
                 
@@ -201,7 +217,15 @@ function Modal({
                             </div>
                             <div>
                                 <label>Người chi trả</label>
-                                <input type="text" name="payer" placeholder="Tên người thanh toán" value={form.payer} onChange={handleChange} />
+                                {/* ĐÃ SỬA THÀNH THẺ SELECT */}
+                                <select name="payer" value={form.payer} onChange={handleChange}>
+                                    <option value="">-- Chọn người chi trả --</option>
+                                    {users.map((user) => (
+                                        <option key={user._id} value={user._id}>
+                                            {user.name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
                     )}
@@ -238,7 +262,6 @@ function Modal({
                                 </div>
                                 <div>
                                     <label>Trạng thái</label>
-                                    {/* 3. ĐÃ SỬA: Cập nhật các option chuẩn theo Backend Enum */}
                                     <select name="status" value={form.status} onChange={handleChange}>
                                         <option value="Chờ duyệt">Chờ duyệt</option>
                                         <option value="Sắp tới">Sắp tới</option>
@@ -254,7 +277,15 @@ function Modal({
                                 </div>
                                 <div>
                                     <label>Người phụ trách/Chi trả</label>
-                                    <input type="text" name="payer" placeholder="Nhập tên người phụ trách" value={form.payer} onChange={handleChange} />
+                                    {/* ĐÃ SỬA THÀNH THẺ SELECT */}
+                                    <select name="payer" value={form.payer} onChange={handleChange}>
+                                        <option value="">-- Chọn người phụ trách --</option>
+                                        {users.map((user) => (
+                                            <option key={user._id} value={user._id}>
+                                                {user.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                             <div className="full-width">
