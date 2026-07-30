@@ -12,6 +12,12 @@ function ExpenseCard({ expense, onEdit, onDelete }) {
     const memberCount = expense.members > 0 ? expense.members : 1;
     const eachPerson = Math.round((expense.amount || 0) / memberCount);
 
+    // Xử lý an toàn cho tên người trả (tránh lỗi Error #31 trắng trang)
+    const payerName = typeof expense.payer === 'object' ? expense.payer?.name : expense.payer;
+
+    // Xử lý hiển thị ngày (Dành cho cả Expense thường và Event)
+    const displayDate = expense.date || (expense.createdAt ? new Date(expense.createdAt).toLocaleDateString('vi-VN') : "Chưa rõ");
+
     return (
         <div className="expense-card">
             <div className="expense-top">
@@ -28,21 +34,22 @@ function ExpenseCard({ expense, onEdit, onDelete }) {
                     <FaUser />
                     <span>
                         Người thanh toán:
-                        <strong> {expense.payer}</strong>
+                        {/* ĐÃ FIX LỖI Ở ĐÂY */}
+                        <strong> {payerName || "Chưa rõ"}</strong>
                     </span>
                 </div>
                 <div className="expense-item">
                     <FaUsers />
                     <span>
                         Thành viên tham gia:
-                        <strong> {expense.members}</strong>
+                        <strong> {expense.members || 1}</strong>
                     </span>
                 </div>
                 <div className="expense-item">
                     <FaCalendarAlt />
                     <span>
                         Ngày:
-                        <strong> {expense.date}</strong>
+                        <strong> {displayDate}</strong>
                     </span>
                 </div>
                 <div className="expense-item">
