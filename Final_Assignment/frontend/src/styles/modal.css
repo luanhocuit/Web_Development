@@ -217,3 +217,52 @@
         width: 100%;
     }
 }
+
+/* ===========================================
+                DARK THEME FOR MODAL
+=========================================== */
+
+/* 1. Ép nền Modal tối màu */
+body.dark-theme .event-modal {
+    background-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+}
+
+/* 2. Ép chữ tiêu đề và Label thành màu trắng */
+body.dark-theme .modal-header h2,
+body.dark-theme .form-grid label,
+body.dark-theme .full-width label {
+    color: #ffffff !important;
+}
+
+/* 3. Ép các ô Input, Select, Textarea chìm vào nền tối */
+body.dark-theme .form-grid input,
+body.dark-theme .form-grid select,
+body.dark-theme .full-width textarea,
+body.dark-theme .full-width select {
+    background-color: #374151 !important;
+    color: #ffffff !important;
+    border: 1px solid #4b5563 !important;
+}
+
+/* 4. Ép màu nút Đóng (X) */
+body.dark-theme .close-btn {
+    background-color: #374151 !important;
+    color: #f3f4f6 !important;
+}
+
+body.dark-theme .close-btn:hover {
+    background-color: #ef4444 !important;
+    color: white !important;
+}
+
+/* 5. Ép màu nút Hủy */
+body.dark-theme .cancel-btn {
+    background-color: #4b5563 !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+}
+
+body.dark-theme .cancel-btn:hover {
+    background-color: #6b7280 !important;
+}
