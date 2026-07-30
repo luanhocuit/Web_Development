@@ -155,3 +155,28 @@ body.dark-theme p,
 body.dark-theme span {
    color: #94a3b8;
 }
+
+/* ===========================================
+    ÉP TOÀN BỘ KHUNG CARD & Ô SEARCH CHUYỂN TỐI
+=========================================== */
+body.dark-theme [class*="card"],
+body.dark-theme [class*="modal"],
+body.dark-theme [class*="box"],
+body.dark-theme [class*="search"] {
+    background-color: var(--card-bg) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border) !important;
+}
+
+body.dark-theme [class*="card"] h1,
+body.dark-theme [class*="card"] h2,
+body.dark-theme [class*="card"] h3,
+body.dark-theme [class*="card"] h4,
+body.dark-theme [class*="card"] strong {
+    color: var(--text-h) !important;
+}
+
+body.dark-theme [class*="card"] p,
+body.dark-theme [class*="card"] span {
+    color: #94a3b8 !important;
+}
