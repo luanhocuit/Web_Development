@@ -1,25 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/modal.css";
 
 function Modal({
     isOpen,
     onClose,
     onSave,
-    type = "event", // "event", "member", hoặc "expense"
-    event = null
+    type = "event", 
+    editingEvent = null // 1. ĐÃ SỬA: Đổi tên prop cho khớp với SuKien.jsx truyền xuống
 }) {
-    // State chung cho các loại form
+    // Hàm phụ trợ: Format ngày giờ từ MongoDB ra chuẩn HTML5 datetime-local (YYYY-MM-DDThh:mm)
+    const formatDateTimeLocal = (dateString) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        // Trừ đi offset để lấy đúng giờ Local, tránh bị lệch múi giờ (UTC)
+        const tzOffset = date.getTimezoneOffset() * 60000;
+        return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
+    };
+
+    // Khởi tạo state với các giá trị rỗng mặc định
     const [form, setForm] = useState({
-        title: event?.title || "",
-        description: event?.description || "",
-        start: event?.startTime || event?.start || "", // Hỗ trợ cả start và startTime
-        end: event?.endTime || event?.end || "",       // Hỗ trợ cả end và endTime
-        location: event?.location || "",
-        category: event?.type || event?.category || "Ăn uống", // Hỗ trợ cả type và category
-        status: event?.status || "Sắp diễn ra",
-        members: event?.members || [],
-        cost: event?.cost || "",
-        payer: event?.payer || "",
+        title: "",
+        description: "",
+        start: "", 
+        end: "",   
+        location: "",
+        category: "Ăn uống", 
+        status: "Sắp tới", 
+        members: [],
+        cost: "",
+        payer: "",
         name: "",
         email: "",
         password: "",
@@ -29,6 +38,26 @@ function Modal({
     });
 
     const [isLoading, setIsLoading] = useState(false);
+
+    // 2. ĐÃ THÊM: Theo dõi biến editingEvent, nếu có dữ liệu thì nạp vào form
+    useEffect(() => {
+        if (editingEvent) {
+            setForm({
+                ...form,
+                title: editingEvent.title || "",
+                description: editingEvent.description || "",
+                // Áp dụng hàm format thời gian
+                start: formatDateTimeLocal(editingEvent.startTime),
+                end: formatDateTimeLocal(editingEvent.endTime),
+                location: editingEvent.location || "",
+                category: editingEvent.type || "Ăn uống",
+                status: editingEvent.status || "Sắp tới",
+                cost: editingEvent.cost || "",
+                // Nếu payer đã được populate ở Backend, nó sẽ là object. Cần lấy _id
+                payer: editingEvent.payer?._id || editingEvent.payer || ""
+            });
+        }
+    }, [editingEvent]);
 
     if (!isOpen) return null;
 
@@ -50,7 +79,7 @@ function Modal({
 
         try {
             const token = localStorage.getItem("token");
-            const apiUrl = import.meta.env.VITE_API_URL;
+            const apiUrl = import.meta.env.VITE_API_URL || "https://final-assignment-x6nf.onrender.com";
             
             let url = "";
             let method = "POST";
@@ -72,27 +101,24 @@ function Modal({
                     payer: form.payer
                 };
             } else {
-                // ---- ĐÂY LÀ ĐOẠN KHẮC PHỤC LỖI TẠO SỰ KIỆN ----
-                url = event ? `${apiUrl}/api/events/${event._id}` : `${apiUrl}/api/events`;
-                method = event ? "PUT" : "POST";
+                // Sự kiện: Kiểm tra nếu có editingEvent thì là PUT, không thì POST
+                url = editingEvent ? `${apiUrl}/api/events/${editingEvent._id}` : `${apiUrl}/api/events`;
+                method = editingEvent ? "PUT" : "POST";
                 
-                // Đổi tên các biến cho đúng chuẩn Backend yêu cầu
                 bodyData = {
                     title: form.title,
-                    type: form.category,       // Đổi category -> type
-                    startTime: form.start,     // Đổi start -> startTime
-                    endTime: form.end,         // Đổi end -> endTime
+                    type: form.category,       
+                    startTime: form.start,     
+                    endTime: form.end,         
                     location: form.location,
                     status: form.status,
                     description: form.description
                 };
 
-                // Chỉ gửi cost nếu có nhập số tiền
                 if (form.cost) {
                     bodyData.cost = Number(form.cost);
                 }
 
-                // Sửa lỗi "Cast to ObjectId": Chỉ gửi payer lên nếu thực sự có chọn người trả tiền (không gửi chuỗi rỗng "")
                 if (form.payer && form.payer.trim() !== "") {
                     bodyData.payer = form.payer;
                 }
@@ -129,7 +155,7 @@ function Modal({
                     <h2>
                         {type === "member" && "Thêm thành viên mới"}
                         {type === "expense" && "Thêm khoản chi tiêu"}
-                        {type === "event" && (event ? "Chỉnh sửa sự kiện" : "Thêm sự kiện")}
+                        {type === "event" && (editingEvent ? "Chỉnh sửa sự kiện" : "Thêm sự kiện")}
                     </h2>
                     <button className="close-btn" onClick={onClose} disabled={isLoading}>
                         ✕
@@ -180,7 +206,7 @@ function Modal({
                         </div>
                     )}
 
-                    {/* FORM SỰ KIỆN (Mặc định) */}
+                    {/* FORM SỰ KIỆN */}
                     {type === "event" && (
                         <>
                             <div className="form-grid">
@@ -191,15 +217,14 @@ function Modal({
                                 <div>
                                     <label>Loại hoạt động</label>
                                     <select name="category" value={form.category} onChange={handleChange}>
-                                        <option>Ăn uống</option>
-                                        <option>Ngắm cảnh</option>
-                                        <option>Bonding</option>
-                                        <option>Di chuyển</option>
-                                        <option>Khác</option>
+                                        <option value="Ăn uống">Ăn uống</option>
+                                        <option value="Ngắm cảnh">Ngắm cảnh</option>
+                                        <option value="Bonding">Bonding</option>
+                                        <option value="Di chuyển">Di chuyển</option>
+                                        <option value="Khác">Khác</option>
                                     </select>
                                 </div>
                                 <div>
-                                    {/* Đổi thành datetime-local để có thể lấy cả ngày lẫn giờ */}
                                     <label>Giờ bắt đầu *</label>
                                     <input type="datetime-local" name="start" value={form.start} onChange={handleChange} required />
                                 </div>
@@ -213,11 +238,14 @@ function Modal({
                                 </div>
                                 <div>
                                     <label>Trạng thái</label>
+                                    {/* 3. ĐÃ SỬA: Cập nhật các option chuẩn theo Backend Enum */}
                                     <select name="status" value={form.status} onChange={handleChange}>
-                                        <option>Sắp diễn ra</option>
-                                        <option>Đang diễn ra</option>
-                                        <option>Đã hoàn thành</option>
-                                        <option>Tạm hoãn</option>
+                                        <option value="Chờ duyệt">Chờ duyệt</option>
+                                        <option value="Sắp tới">Sắp tới</option>
+                                        <option value="Đang diễn ra">Đang diễn ra</option>
+                                        <option value="Đã xong">Đã xong</option>
+                                        <option value="Tạm hoãn">Tạm hoãn</option>
+                                        <option value="Hủy">Hủy</option>
                                     </select>
                                 </div>
                             </div>
