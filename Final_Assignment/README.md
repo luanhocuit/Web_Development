@@ -37,7 +37,7 @@
 - 🎀 CSS thuần (chia theo module: auth, dashboard, event, expense, member, modal, navbar, profile, sidebar, statistic)
 
 **🚀 Triển khai (Deploy)**
-- Frontend: ▲ Vercel
+- Frontend: ▲ Vercel : [Link](final-assignment-lyart-psi.vercel.app)
 - Backend: server Node.js riêng (CORS cấu hình cho phép domain Vercel + localhost)
 
 ## 🌳 4. Cây thư mục tổng quát
