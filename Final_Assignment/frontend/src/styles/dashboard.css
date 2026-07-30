@@ -1,257 +1,201 @@
 /* ===========================================
-                DASHBOARD CARD
+            DASHBOARD CARD
 =========================================== */
-
-.dashboard-cards{
-
-    display:grid;
-
-    grid-template-columns:repeat(4,1fr);
-
-    gap:20px;
-
-    margin-bottom:35px;
-
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 35px;
 }
 
-.dashboard-card{
-
-    background:white;
-
-    border-radius:16px;
-
-    padding:25px;
-
-    box-shadow:var(--shadow);
-
-    transition:.25s;
-
+.dashboard-card {
+    background: var(--card-bg, white);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+    transition: .25s;
 }
 
-.dashboard-card:hover{
-
-    transform:translateY(-5px);
-
+.dashboard-card:hover {
+    transform: translateY(-5px);
 }
 
-.dashboard-card svg{
-
-    font-size:35px;
-
-    color:var(--primary);
-
-    margin-bottom:15px;
-
+.dashboard-card svg {
+    font-size: 35px;
+    color: var(--primary);
+    margin-bottom: 15px;
 }
 
-.dashboard-card h2{
-
-    margin-bottom:10px;
-
-    color:#111827;
-
+.dashboard-card h2 {
+    margin-bottom: 10px;
+    color: var(--text-color, #111827);
 }
 
-.dashboard-card p{
-
-    color:#6b7280;
-
+.dashboard-card p {
+    color: var(--text-muted, #6b7280);
 }
 
 /* ===========================================
                 GRID
 =========================================== */
-
-.dashboard-grid{
-
-    display:grid;
-
-    grid-template-columns:2fr 1fr;
-
-    gap:25px;
-
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
 }
 
 /* ===========================================
                 TIMELINE
 =========================================== */
-
-.timeline{
-
-    background:white;
-
-    border-radius:16px;
-
-    padding:25px;
-
-    box-shadow:var(--shadow);
-
+.timeline {
+    background: var(--card-bg, white);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: var(--shadow);
 }
 
-.section-title{
-
-    margin-bottom:25px;
-
+.section-title {
+    margin-bottom: 25px;
 }
 
-.timeline-item{
-
-    display:flex;
-
-    gap:20px;
-
-    padding:18px 0;
-
-    border-bottom:1px solid #eee;
-
+.section-title h2 {
+    color: var(--text-color, #111827);
 }
 
-.timeline-item:last-child{
-
-    border-bottom:none;
-
+.timeline-item {
+    display: flex;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border-color, #eee);
 }
 
-.timeline-time{
-
-    width:70px;
-
-    font-weight:bold;
-
-    color:var(--primary);
-
+.timeline-item:last-child {
+    border-bottom: none;
 }
 
-.timeline-content h3{
-
-    margin-bottom:8px;
-
+.timeline-time {
+    width: 70px;
+    font-weight: bold;
+    color: var(--primary);
 }
 
-.timeline-content p{
-
-    color:#6b7280;
-
-    margin-bottom:8px;
-
+.timeline-content h3 {
+    margin-bottom: 8px;
+    color: var(--text-color, #111827);
 }
 
-.timeline-content span{
+.timeline-content p {
+    color: var(--text-muted, #6b7280);
+    margin-bottom: 8px;
+}
 
-    display:inline-block;
-
-    padding:5px 12px;
-
-    border-radius:20px;
-
-    background:#dbeafe;
-
-    color:#1d4ed8;
-
-    font-size:13px;
-
+.timeline-content span {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 13px;
 }
 
 /* ===========================================
                 RIGHT
 =========================================== */
-
-.dashboard-right{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:20px;
-
+.dashboard-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.summary-card{
-
-    background:white;
-
-    border-radius:16px;
-
-    padding:25px;
-
-    box-shadow:var(--shadow);
-
+.summary-card {
+    background: var(--card-bg, white);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: var(--shadow);
 }
 
-.summary-card h3{
-
-    margin-bottom:15px;
-
+.summary-card h3 {
+    margin-bottom: 15px;
+    color: var(--text-color, #111827);
 }
 
-.summary-card h2{
-
-    margin-bottom:10px;
-
+.summary-card h2 {
+    margin-bottom: 10px;
+    color: var(--text-color, #111827);
 }
 
-.summary-card p{
-
-    color:#6b7280;
-
-    margin-bottom:20px;
-
+.summary-card p {
+    color: var(--text-muted, #6b7280);
+    margin-bottom: 20px;
 }
 
-.summary-card button{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:10px;
-
-    padding:12px 18px;
-
-    border-radius:10px;
-
-    background:var(--primary);
-
-    color:white;
-
+.summary-card button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
-.summary-card ul{
+.summary-card ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+}
 
-    display:flex;
-
-    flex-direction:column;
-
-    gap:12px;
-
+.summary-card li {
+    color: var(--text-color, #111827);
 }
 
 /* ===========================================
-            RESPONSIVE
+    DARK THEME OVERRIDES (Hỗ trợ Dark Mode)
 =========================================== */
-
-@media(max-width:1100px){
-
-    .dashboard-cards{
-
-        grid-template-columns:repeat(2,1fr);
-
-    }
-
-    .dashboard-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
+body.dark-theme .dashboard-card,
+body.dark-theme .timeline,
+body.dark-theme .summary-card {
+    background: #1e293b !important;
+    color: #f8fafc !important;
 }
 
-@media(max-width:700px){
+body.dark-theme .dashboard-card h2,
+body.dark-theme .timeline-content h3,
+body.dark-theme .section-title h2,
+body.dark-theme .summary-card h3,
+body.dark-theme .summary-card h2,
+body.dark-theme .summary-card li {
+    color: #f8fafc !important;
+}
 
-    .dashboard-cards{
+body.dark-theme .dashboard-card p,
+body.dark-theme .timeline-content p,
+body.dark-theme .summary-card p {
+    color: #94a3b8 !important;
+}
 
-        grid-template-columns:1fr;
+body.dark-theme .timeline-item {
+    border-bottom: 1px solid #334155 !important;
+}
 
+/* ===========================================
+                RESPONSIVE
+=========================================== */
+@media(max-width:1100px) {
+    .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
     }
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
+@media(max-width:700px) {
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
 }
